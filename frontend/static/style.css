@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
 body{
     box-sizing: border-box;
     margin: 0;
@@ -179,6 +181,7 @@ page-block{
     align-self: center;
     animation: vertical-apparition 1.5s forwards;
     animation-play-state: paused;
+    font-family: "DM Sans", sans-serif;
 }
 
 .block-child img{
