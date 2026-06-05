@@ -4,17 +4,16 @@ class PageHeader extends HTMLElement{
                 <div><img class="logo" src="../static/images/logo.png" alt="logo"></div>
                 <div class="header-buttons">
                     <a href="#">
-                        <img class="header-icon" src="../static/images/user.png" alt="profil">
                         <h3>Profil</h3>
                     </a>
-                    <a href="#">
+                    <a href="inscription.html">
                         <h3>S'inscrire</h3>
                     </a>
-                    <a href="#">
+                    <a href="connexion.html">
                         <h3>Se connecter</h3>
                     </a>
-                    <a href="#">
-                        <h3>Statistiques</h3>
+                    <a href="base.html">
+                        <h3>Accueil</h3>
                     </a>
                 </div>
         `
@@ -34,6 +33,11 @@ class PageFooter extends HTMLElement{
     }
 }
 
+customElements.define("page-header", PageHeader)
+customElements.define("page-footer", PageFooter)
+
+/*Début config base.html*/
+
 class Block extends HTMLElement{
     connectedCallback(){
         const titre = this.getAttribute("titre")
@@ -49,8 +53,6 @@ class Block extends HTMLElement{
     }
 }
 
-customElements.define("page-header", PageHeader)
-customElements.define("page-footer", PageFooter)
 customElements.define("page-block", Block)
 
 /*Animations dynamiques à base d'un observateur*/
@@ -66,4 +68,45 @@ document.querySelectorAll("page-block").forEach(block =>{
     observer.observe(block)
 })
 
-observer.observe(document.querySelector(".presentation-block"))
+if(document.querySelector(".presentation-block")){
+    observer.observe(document.querySelector(".presentation-block"))
+}
+
+/*Fin config base.html*/
+
+/*Config formulaire d'inscription*/
+let inscription_form = document.getElementById("inscription-form")
+let pwd_submission = document.getElementById("password-submission")
+
+/*Gestion mot de passe*/
+const pwd_submission_error_message = document.createElement("p")
+pwd_submission_error_message.textContent = "Les motes de passe ne correspondent pas"
+pwd_submission_error_message.classList.add("pwd-different")
+
+const password_gestion = (pwd, confirmed_pwd, e) => {
+    if (pwd !== confirmed_pwd){
+        pwd_submission.appendChild(pwd_submission_error_message)
+        e.preventDefault()
+    }else{
+        pwd_submission_error_message.remove()
+    }
+}
+
+if(pwd_submission){
+    let submitted_password = ""
+    let confirmed_submitted_password = ""
+
+    document.getElementById("pwd").addEventListener("input", () =>{
+        submitted_password = document.getElementById("pwd").value
+    })
+
+    document.getElementById("confirm-pwd").addEventListener("input", () =>{
+        confirmed_submitted_password = document.getElementById("confirm-pwd").value
+    })
+
+    inscription_form.querySelector(".blue-button").addEventListener("click", (e) =>{
+        password_gestion(submitted_password, confirmed_submitted_password, e)
+    })
+}
+
+/*Fin config formulaire d'inscription*/

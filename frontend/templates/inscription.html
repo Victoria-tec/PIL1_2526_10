@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="../static/script.js" type="module"></script>
+    <title>Inscription</title>
+</head>
+<body>
+    <div class="inscription-block">
+        <div style="align-self: center; display: flex; flex-direction: column; align-items: center; color: var(--bleu);">
+            <h1>Inscription</h1>
+            <div class="stick"></div>
+        </div>
+        <form action="#" id="inscription-form">
+            <label for="nom">Votre nom</label>
+            <input type="text" id="nom" required>
+
+            <label for="prenom">Votre prénom</label>
+            <input type="text" id="prenom" required>
+
+            <label for="mail">Votre adresse email</label>
+            <input type="email" id="mail" placeholder="monemail@gmail.com" required>
+
+            <label for="phone">Numéro de téléphone</label>
+            <input type="tel" id="phone" placeholder="0149494949" pattern="[0-9]{10}" required>
+
+            <div id="password-submission">
+                <label for="pwd">Mot de passe</label>
+                <input type="password" id="pwd" required>
+
+                <label for="confirm-pwd">Confirmez votre mot de passe</label>
+                <input type="password" id="confirm-pwd" required>
+            </div>
+
+            <button class="blue-button">S'inscrire</button>
+        </form>
+    </div>
+    <page-footer></page-footer>
+</body>
+</html>
