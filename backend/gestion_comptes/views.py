@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from .forms import InscriptionForm, ConnexionForm
 from .models import User, Profile
+from .forms import InscriptionForm, ConnexionForm, ReinitialisationMotDePasseForm
 
 def inscription(request):
     if request.method == 'POST':
@@ -48,3 +49,21 @@ def connexion(request):
 def deconnexion(request):
     request.session.flush()
     return redirect('connexion')
+
+def reinitialisation_mot_de_passe(request):
+    if request.method == 'POST':
+        form = ReinitialisationMotDePasseForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            nouveau_mot_de_passe = form.cleaned_data['nouveau_mot_de_passe']
+            try:
+                user = User.objects.get(email=email)
+                user.mot_de_passe = make_password(nouveau_mot_de_passe)
+                user.save()
+                messages.success(request, "Mot de passe modifié avec succès !")
+                return redirect('connexion')
+            except User.DoesNotExist:
+                messages.error(request, "Aucun compte trouvé avec cet email.")
+    else:
+        form = ReinitialisationMotDePasseForm()
+    return render(request, 'gestion_comptes/reinitialisation_mot_de_passe.html', {'form': form})
