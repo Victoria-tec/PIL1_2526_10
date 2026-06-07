@@ -118,6 +118,42 @@ if(pwd_submission){
 
 /*Fin config formulaire d'inscription*/
 
+/* Gestion modification mot de passe*/
+let modify_pwd_form = document.getElementById("modify-password-form")
+
+if(modify_pwd_form){
+    let step = 1
+    modify_pwd_form.addEventListener("submit", (e) =>{
+        e.preventDefault()
+
+        if(step === 1){
+            document.querySelector("h1").textContent = "Entrez le code à 4 chiffres reçu"
+            document.getElementById("mail").type = "text"
+            document.getElementById("mail").placeholder = "1234"
+            document.getElementById("mail").value = ""
+            modify_pwd_form.querySelector("label").textContent = ""
+            modify_pwd_form.querySelector("button").textContent = "Soumettre"
+
+            modify_pwd_form.querySelector("button").addEventListener("click", () =>{
+                step += 1
+            })
+        }else{
+            document.querySelector("h1").textContent = "MODIFIER MOT DE PASSE"
+            modify_pwd_form.innerHTML = `
+                    <div id="password-submission">
+                        <label for="pwd">Nouveau mot de passe</label>
+                        <input type="password" id="pwd" name="mot_de_passe" required>
+
+                        <label for="confirm-pwd">Confirmez votre nouveau mot de passe</label>
+                        <input type="password" id="confirm-pwd" name="confirmation_mot_de_passe" required>
+                    </div>
+
+                    <button class="blue-button">Soumettre</button>
+            `
+        }
+    })
+}
+
 /*Main Page*/
 
 class SideBar extends HTMLElement{
@@ -178,3 +214,5 @@ class MatchBlock extends HTMLElement{
 }
 
 customElements.define("match-block", MatchBlock)
+
+/* Fin main page*/
