@@ -1,17 +1,24 @@
 class PageHeader extends HTMLElement{
     connectedCallback(){
+        let type = this.getAttribute("variante")
         this.innerHTML = `
                 <div><img class="logo" src="../static/images/logo.png" alt="logo"></div>
                 <div class="header-buttons">
                     <a href="#">
                         <h3>Profil</h3>
                     </a>
-                    <a href="inscription.html">
-                        <h3>S'inscrire</h3>
-                    </a>
-                    <a href="connexion.html">
-                        <h3>Se connecter</h3>
-                    </a>
+                    ${type === "accueil" ? `
+                            <a href="gestion_comptes/inscription.html">
+                                <h3>S'inscrire</h3>
+                            </a>
+                            <a href="connexion.html">
+                                <h3>Se connecter</h3>
+                            </a>
+                        ` : `
+                            <a href="base.html" id="deconnexion-button">
+                                <h3>Déconnexion</h3>
+                            </a>
+                        `}
                     <a href="base.html">
                         <h3>Accueil</h3>
                     </a>
@@ -110,3 +117,64 @@ if(pwd_submission){
 }
 
 /*Fin config formulaire d'inscription*/
+
+/*Main Page*/
+
+class SideBar extends HTMLElement{
+    connectedCallback(){
+        let user_name = this.getAttribute("user-name")
+        this.innerHTML = `
+                <div class="profile-pic-box"></div>
+                <div style="text-align: center"><p style="margin-top: 0; margin-bottom: 0; color: white;">${user_name}</p></div>
+                <div class="brown-button">
+                    <img src="../static/images/message-bubble.png" alt="messagerie" class="side-bar-icon">
+                    <p>Messagerie</p>
+                </div>
+                <div class="brown-button">
+                    <img src="../static/images/help.png" alt="messagerie" class="side-bar-icon">
+                    <p>Demandes</p>
+                </div>
+                <div class="brown-button">
+                    <img src="../static/images/annonce.png" alt="messagerie" class="side-bar-icon">
+                    <p>Annonces</p>
+                </div>
+                <p>IFRI, Nous visons l'excellence !</p>
+        `
+    }
+}
+
+customElements.define("side-bar", SideBar)
+
+class MatchBlock extends HTMLElement{
+    connectedCallback(){
+        let student_nom = this.getAttribute("student-nom")
+        let student_prenom = this.getAttribute("student-prenom")
+        let student_pic = this.getAttribute("student-pic")
+        let mentor_nom = this.getAttribute("mentor-nom")
+        let mentor_prenom = this.getAttribute("mentor-prenom")
+        let mentor_pic = this.getAttribute("mentor-pic")
+        let topic = this.getAttribute("topic")
+        let status = this.getAttribute("status")
+        let compatibility_score = this.getAttribute("compatibility-score")
+        this.innerHTML = `
+                    <div style="display: flex; height: 50%; width: 100%;">
+                        <div class="block-half" data-usertype = "student">
+                            <div class="mini-profile-pic"></div>
+                            <h5>${student_nom} <br> ${student_prenom}</h5>
+                        </div>
+                        <div class="block-half" data-usertype="mentor">
+                            <h5>${mentor_nom} <br> ${mentor_prenom}</h5>
+                            <div class="mini-profile-pic"></div>
+                        </div>
+                    </div>
+                    <h4><a href="#">--${topic}--</a></h4>
+                    <div style="display: flex; gap: 3px; align-items: center; justify-content: center; margin-top: 0">
+                        <div class="compatibility" style="width: 40%; height: 27%; height: 40%; margin-top: 0"><h5>Compatibilité : ${compatibility_score}%</h5></div>
+                        <button class="validation" style="border-style: none; width: 27%; height: 40%; margin-top: 0"><h5>${status==="validated" ? `Conversation` : `Valider`}</h5></button>
+                        <button class="validation" style="border-style: none; width: 27%; height: 40%; margin-top: 0; background-color: rgb(189, 22, 22);"><h5>${status==="validated" ? `Achever` : `Rejeter`}</h5></button>
+                    </div>
+        `
+    }
+}
+
+customElements.define("match-block", MatchBlock)

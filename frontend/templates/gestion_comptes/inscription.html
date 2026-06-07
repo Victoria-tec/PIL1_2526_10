@@ -1,10 +1,12 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/style.css">
-    <script src="../static/script.js" type="module"></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="{% static script.js %}" type="module"></script>
     <title>Inscription</title>
 </head>
 <body>
@@ -13,25 +15,27 @@
             <h1>Inscription</h1>
             <div class="stick"></div>
         </div>
-        <form action="#" id="inscription-form">
+        <form action="{% url 'inscription' %}" id="inscription-form">
+            {% csrf_token %}
+
             <label for="nom">Votre nom</label>
-            <input type="text" id="nom" required>
+            <input type="text" id="nom" name="nom" required>
 
             <label for="prenom">Votre prénom</label>
-            <input type="text" id="prenom" required>
+            <input type="text" id="prenom" name="prenom" required>
 
             <label for="mail">Votre adresse email</label>
-            <input type="email" id="mail" placeholder="monemail@gmail.com" required>
+            <input type="email" id="mail" name="email" placeholder="monemail@gmail.com" required>
 
             <label for="phone">Numéro de téléphone</label>
-            <input type="tel" id="phone" placeholder="0149494949" pattern="[0-9]{10}" required>
+            <input type="tel" id="phone" name="telephone" placeholder="0149494949" pattern="[0-9]{10}" required>
 
             <div id="password-submission">
                 <label for="pwd">Mot de passe</label>
-                <input type="password" id="pwd" required>
+                <input type="password" id="pwd" name="mot_de_passe" required>
 
                 <label for="confirm-pwd">Confirmez votre mot de passe</label>
-                <input type="password" id="confirm-pwd" required>
+                <input type="password" id="confirm-pwd" name="confirmation_mot_de_passe" required>
             </div>
 
             <button class="blue-button">S'inscrire</button>
