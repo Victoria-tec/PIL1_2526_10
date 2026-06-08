@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'IFRI_MentorLink.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'IFRI_MentorLink',      # Le nom de la base créée dans son pgAdmin
+        'USER': 'postgres',              # Son nom d'utilisateur pgAdmin
+        'PASSWORD': 'M@n02008',   # Son vrai mot de passe pgAdmin
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
