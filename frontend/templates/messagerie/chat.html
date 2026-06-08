@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Messagerie – IFRI MentorLink</title>
+    <link rel="stylesheet" href="chat.css" />
+</head>
+
+<body>
+
+    <!-- CONTENEUR GLOBAL -->
+    <div class="page-messagerie">
+
+        <!-- SIDEBAR CONVERSATIONS -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-top">
+                <a href="index.html" class="btn-retour">
+                    <!-- fleche gauche -->
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                    Retour
+                </a>
+                <h2>Messages</h2>
+            </div>
+
+            <div class="liste-convs" id="listeConvs">
+                <!-- rempli par JS -->
+            </div>
+
+        </aside>
+
+        <!-- ZONE CHAT -->
+        <section class="chat-zone">
+
+            <!-- état vide -->
+            <div class="etat-vide" id="etatVide">
+                <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+                <p>Sélectionne une conversation pour commencer</p>
+            </div>
+
+            <!-- header du chat (caché au départ) -->
+            <div class="chat-header" id="chatHeader" style="display:none">
+                <div class="av" id="chAv"></div>
+                <div class="ch-info">
+                    <h3 id="chNom"></h3>
+                    <p id="chStatut"></p>
+                </div>
+                <!-- bouton fermer sur mobile -->
+                <button class="btn-fermer" onclick="fermerChat()" title="Fermer">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.3">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- messages -->
+            <div class="messages-zone" id="messagesZone" style="display:none"></div>
+
+            <!-- barre d'envoi -->
+            <div class="barre-envoi" id="barreEnvoi" style="display:none">
+                <textarea id="champMsg" class="champ-msg" rows="1" placeholder="Écrire un message…"
+                    onkeydown="gererTouche(event)" oninput="ajusterHauteur(this)"></textarea>
+                <button class="btn-envoyer" onclick="envoyerMessage()">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.2">
+                        <line x1="22" y1="2" x2="11" y2="13" />
+                        <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                    </svg>
+                </button>
+            </div>
+
+        </section>
+    </div>
+
+    <script src="chat.js"></script>
+</body>
+
+</html>
