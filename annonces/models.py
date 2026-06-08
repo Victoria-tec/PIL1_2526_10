@@ -37,3 +37,4 @@ class Proposal(models.Model):
 
     def __str__(self):
         return f"{self.type} - {self.matiere} (par {self.auteur.email})"
+    

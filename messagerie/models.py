@@ -38,3 +38,4 @@ class Message(models.Model):
 
     def __str__(self):
         return f"Message de {self.expediteur.email} à {self.date_envoi}"
+    
