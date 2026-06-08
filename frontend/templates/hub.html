@@ -13,7 +13,11 @@
     <div class="body-with-side-bar">
         <side-bar user-name="DJIDONOU Paul"></side-bar>
         <div class="body-without-side-bar">
-            <div style="display: flex; flex-direction: column; align-items: center; align-self: center; color: black; animation: reverse-vertical-apparition 0.8s ease;">
+            <div class="welcome-message">
+                <h1 style="font-size: 70px;">Bon retour Victoria !</h1>
+                <h1 style="font-style: italic;">Prête à reprendre le boulot ?</h1>
+            </div>
+            <div style="margin-top: 0; display: flex; flex-direction: column; align-items: center; align-self: center; color: black; animation: reverse-vertical-apparition 0.8s ease;">
                 <h1>VOTRE ACTIVITÉ</h1>
                 <div class="stick" style="background-color: black;"></div>
             </div>
@@ -25,7 +29,14 @@
             </div>
         </div>
         <div class="category">
-            <h3>En attente de validation</h3>
+            <h3>En attente de votre validation</h3>
+            <div class="stick"></div>
+            <div class="category-blocks-box">
+                <match-block student-nom="DJIDONOU" student-prenom="Paul" mentor-nom="HOUENOU" mentor-prenom="Hughes" topic="Algorithmique" compatibility-score="70" status="to-validate"></match-block>
+            </div>
+        </div>
+        <div class="category">
+            <h3>En attente de réponse</h3>
             <div class="stick"></div>
             <div class="category-blocks-box">
                 <match-block student-nom="DJIDONOU" student-prenom="Paul" mentor-nom="HOUENOU" mentor-prenom="Hughes" topic="Algorithmique" compatibility-score="70" status="to-validate"></match-block>

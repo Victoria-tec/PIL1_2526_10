@@ -4,24 +4,21 @@ class PageHeader extends HTMLElement{
         this.innerHTML = `
                 <div><img class="logo" src="../static/images/logo.png" alt="logo"></div>
                 <div class="header-buttons">
-                    <a href="#">
-                        <h3>Profil</h3>
-                    </a>
                     ${type === "accueil" ? `
+                            <a href="base.html">
+                                <h3>Accueil</h3>
+                            </a>
                             <a href="gestion_comptes/inscription.html">
                                 <h3>S'inscrire</h3>
                             </a>
-                            <a href="connexion.html">
+                            <a href="gestion_comptes/connexion.html">
                                 <h3>Se connecter</h3>
                             </a>
                         ` : `
-                            <a href="base.html" id="deconnexion-button">
-                                <h3>Déconnexion</h3>
+                            <a href="base.html">
+                                <h3>Accueil</h3>
                             </a>
                         `}
-                    <a href="base.html">
-                        <h3>Accueil</h3>
-                    </a>
                 </div>
         `
     }
@@ -163,16 +160,20 @@ class SideBar extends HTMLElement{
                 <div class="profile-pic-box"></div>
                 <div style="text-align: center"><p style="margin-top: 0; margin-bottom: 0; color: white;">${user_name}</p></div>
                 <div class="brown-button">
-                    <img src="../static/images/message-bubble.png" alt="messagerie" class="side-bar-icon">
-                    <p>Messagerie</p>
+                    <img src="../static/images/message-bubble.png" alt="profil" class="side-bar-icon">
+                    <p>Profil</p>
                 </div>
                 <div class="brown-button">
                     <img src="../static/images/help.png" alt="messagerie" class="side-bar-icon">
-                    <p>Demandes</p>
+                    <p>Messagerie</p>
                 </div>
                 <div class="brown-button">
-                    <img src="../static/images/annonce.png" alt="messagerie" class="side-bar-icon">
-                    <p>Annonces</p>
+                    <img src="../static/images/annonce.png" alt="create" class="side-bar-icon">
+                    <p>Créer</p>
+                </div>
+                <div class="brown-button">
+                    <img src="../static/images/message-bubble.png" alt="deconnexion" class="side-bar-icon">
+                    <p>Déconnexion</p>
                 </div>
                 <p>IFRI, Nous visons l'excellence !</p>
         `
