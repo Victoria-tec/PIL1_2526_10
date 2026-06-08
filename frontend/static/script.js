@@ -300,3 +300,44 @@ class MatchBlock extends HTMLElement{
 customElements.define("match-block", MatchBlock)
 
 /* Fin main page*/
+
+/*Page résultats matching*/
+
+class MatchProposition extends HTMLElement{
+    connectedCallback(){
+        let match_nom = this.getAttribute("nom")
+        let match_prenom = this.getAttribute("prenom")
+        let match_niveau = this.getAttribute("niveau")
+        let score = this.getAttribute("score")
+        this.innerHTML = `
+                <div class="block-half" data-type="mentor">
+                    <div class="mini-profile-pic"></div>
+                    <div class="match-infos">
+                        <h3>${match_nom} <br> ${match_prenom}</h3>
+                        <div><h5 style="font-style: italic;">${match_niveau}</h5></div>
+                    </div>
+                    <button class="blue-button" id="accept-match">Matcher</button>
+                    <div style="display: flex; flex-direction: column; align-items: center; width: 30%; height: 100%; margin-left: auto;">
+                        <div class="circle-out">
+                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100" height="100">
+                                <defs>
+                                    <linearGradient id="GradientColor">
+                                    <stop offset="0%" stop-color="#e91e63" />
+                                    <stop offset="100%" stop-color="#673ab7" />
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="50" cy="50" r="42" stroke-linecap="round" />
+                            </svg>
+                            <div class="circle-in">
+                                <h3>${score}%</h3>
+                            </div>
+                        </div>
+                        <h5>Compatibilité</h5>
+                    </div>
+                </div>
+        `
+        this.querySelector("circle").style.strokeDashoffset = 262-262*(score/100)
+    }
+}
+
+customElements.define("match-proposition", MatchProposition)
