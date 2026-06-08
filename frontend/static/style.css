@@ -264,10 +264,30 @@ page-block{
     gap: 10px;
 }
 
-.inscription-block form input{
+.inscription-block form > input{
     padding: 2px;
     width: 60%;
     outline: none;
+}
+
+#password-submission input{
+    padding: 2px;
+    width: 60%;
+    outline: none;
+}
+
+fieldset{
+    padding: 2px;
+    width: 60%;
+    outline: none;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+}
+
+.sexe-choice-section{
+    display: flex;
+    align-items: left;
 }
 
 .inscription-block button{
@@ -293,6 +313,17 @@ page-block{
     display: flex;
     flex-direction: column;
     gap: 5px;
+}
+
+select{
+    width: 20%;
+}
+
+.points-forts-line{
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    width: 90%;
 }
 
 hr{

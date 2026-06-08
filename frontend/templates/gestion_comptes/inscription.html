@@ -1,28 +1,41 @@
-{% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <script src="{% static script.js %}" type="module"></script>
+    <link rel="stylesheet" href="../../static/style.css">
+    <script src="../../static/script.js" type="module"></script>
     <title>Inscription</title>
 </head>
 <body>
     <div class="inscription-block">
         <div style="align-self: center; display: flex; flex-direction: column; align-items: center; color: var(--bleu);">
-            <h1>Inscription</h1>
+            <h1 id="inscription-text">Inscription</h1>
             <div class="stick"></div>
         </div>
-        <form action="{% url 'inscription' %}" id="inscription-form">
-            {% csrf_token %}
+        <form action="#" id="inscription-form">
 
             <label for="nom">Votre nom</label>
             <input type="text" id="nom" name="nom" required>
 
             <label for="prenom">Votre prénom</label>
             <input type="text" id="prenom" name="prenom" required>
+
+            <fieldset>
+                <legend>Votre sexe</legend>
+                    <div class="sexe-choice-section">
+                    <label for="homme">Homme</label>
+                    <input type="radio" id="homme" name="sexe" value="Homme" required>
+                </div>
+                <div class="sexe-choice-section">
+                    <label for="femme">Femme</label>
+                    <input type="radio" id="femme" name="sexe" value="Femme" required>
+                </div>
+                <div class="sexe-choice-section">
+                    <label for="autre-sexe">Autres</label>
+                    <input type="radio" id="autre-sexe" name="sexe" value="Autres" required>
+                </div>
+            </fieldset>
 
             <label for="mail">Votre adresse email</label>
             <input type="email" id="mail" name="email" placeholder="monemail@gmail.com" required>
@@ -41,6 +54,5 @@
             <button class="blue-button">S'inscrire</button>
         </form>
     </div>
-    <page-footer></page-footer>
 </body>
 </html>

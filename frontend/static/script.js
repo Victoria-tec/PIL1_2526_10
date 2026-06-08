@@ -81,6 +81,7 @@ if(document.querySelector(".presentation-block")){
 /*Config formulaire d'inscription*/
 let inscription_form = document.getElementById("inscription-form")
 let pwd_submission = document.getElementById("password-submission")
+let inscription_text = document.getElementById("inscription-text")
 
 /*Gestion mot de passe*/
 const pwd_submission_error_message = document.createElement("p")
@@ -110,6 +111,88 @@ if(pwd_submission){
 
     inscription_form.querySelector(".blue-button").addEventListener("click", (e) =>{
         password_gestion(submitted_password, confirmed_submitted_password, e)
+    })
+}
+
+/*Fin gestion mot de passe*/
+
+if(inscription_form){
+    inscription_form.addEventListener("submit", (e) =>{
+        e.preventDefault()
+
+        inscription_text.textContent = "Finaliser votre inscription"
+        inscription_form.innerHTML = `
+            <form action="#" id="inscription-form">
+                <label for="level">Votre niveau d'études</label>
+                <select id="level" name="level" required>
+                    <option>L1</option>
+                    <option>L2</option>
+                    <option>L3</option>
+                    <option>M3</option>
+                    <option>M2</option>
+                </select>
+                <label for="filiere">Votre filière</label>
+                <select id="filiere" name="filiere" required>
+                    <option>IA</option>
+                    <option>GL</option>
+                    <option>IoT</option>
+                    <option>SI</option>
+                    <option>IM</option>
+                </select>
+                <fieldset style="width: 80%;">
+                    <legend>Vos points forts</legend>
+                    <div class="points-forts-line">
+                        <label for="algo">Algorithmique</label>
+                        <input type="checkbox" id="algo" name="algo">
+
+                        <label for="python">Python</label>
+                        <input type="checkbox" id="python" name="python">
+
+                        <label for="python">Python</label>
+                        <input type="checkbox" id="python" name="python">
+
+                        <label for="python">Python</label>
+                        <input type="checkbox" id="python" name="python">
+
+                        <label for="python">Python</label>
+                        <input type="checkbox" id="python" name="python">
+
+                        <label for="python">Python</label>
+                        <input type="checkbox" id="python" name="python">
+
+                        <label for="python">Python</label>
+                        <input type="checkbox" id="python" name="python">
+                    </div>
+                </fieldset>
+                <fieldset style="width: 80%;">
+                    <legend>Vos points faibles</legend>
+                    <div class="points-forts-line">
+                        <label for="algo">Algorithmique</label>
+                        <input type="checkbox" id="algo" name="algo">
+
+                        <label for="python">Python</label>
+                        <input type="checkbox" id="python" name="python">
+
+                        <label for="python">Python</label>
+                        <input type="checkbox" id="python" name="python">
+
+                        <label for="python">Python</label>
+                        <input type="checkbox" id="python" name="python">
+
+                        <label for="python">Python</label>
+                        <input type="checkbox" id="python" name="python">
+
+                        <label for="python">Python</label>
+                        <input type="checkbox" id="python" name="python">
+
+                        <label for="python">Python</label>
+                        <input type="checkbox" id="python" name="python">
+                    </div>
+                </fieldset>
+
+                <button class="blue-button">Soumettre</button>
+            </form>
+        `
     })
 }
 
