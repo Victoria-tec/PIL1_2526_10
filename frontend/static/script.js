@@ -111,7 +111,7 @@ const password_gestion = (pwd, confirmed_pwd, e) => {
                 <select id="filiere" name="filiere" required>
                     <option>IA</option>
                     <option>GL</option>
-                    <option>IoT</option>
+                    <option>SEIoT</option>
                     <option>SI</option>
                     <option>IM</option>
                 </select>
@@ -124,20 +124,29 @@ const password_gestion = (pwd, confirmed_pwd, e) => {
                         <label for="python">Python</label>
                         <input type="checkbox" id="python" name="python">
 
-                        <label for="python">Python</label>
-                        <input type="checkbox" id="python" name="python">
+                        <label for="machine-learning>Machine-learning</label>
+                        <input type="checkbox" id="machine-learning" name="machine-learning">
 
-                        <label for="python">Python</label>
-                        <input type="checkbox" id="python" name="python">
+                        <label for="javascript">Javascript</label>
+                        <input type="checkbox" id="javascript" name="javascript">
 
-                        <label for="python">Python</label>
-                        <input type="checkbox" id="python" name="python">
+                        <label for="c/c++">C/C++</label>
+                        <input type="checkbox" id="c/c++" name="c/c++">
 
-                        <label for="python">Python</label>
-                        <input type="checkbox" id="python" name="python">
+                        <label for="reseaux">Réseaux</label>
+                        <input type="checkbox" id="reseaux" name="reseaux">
 
-                        <label for="python">Python</label>
-                        <input type="checkbox" id="python" name="python">
+                        <label for="base de données">Base de données</label>
+                        <input type="checkbox" id="base de données" name="base de données">
+
+                        <label for="mathematiques">Mathématiques</label>
+                        <input type="checkbox" id="mathematiques" name="mathematiques">
+
+                        <label for="linux">Linux</label>
+                        <input type="checkbox" id="linux" name="linux">
+
+                        <label for="git">Git</label>
+                        <input type="checkbox" id="git" name="git">
                     </div>
                 </fieldset>
                 <fieldset style="width: 80%;">
@@ -149,26 +158,40 @@ const password_gestion = (pwd, confirmed_pwd, e) => {
                         <label for="python">Python</label>
                         <input type="checkbox" id="python" name="python">
 
-                        <label for="python">Python</label>
-                        <input type="checkbox" id="python" name="python">
+                        <label for="machine-learning>Machine-learning</label>
+                        <input type="checkbox" id="machine-learning" name="machine-learning">
 
-                        <label for="python">Python</label>
-                        <input type="checkbox" id="python" name="python">
+                        <label for="javascript">Javascript</label>
+                        <input type="checkbox" id="javascript" name="javascript">
 
-                        <label for="python">Python</label>
-                        <input type="checkbox" id="python" name="python">
+                        <label for="c/c++">C/C++</label>
+                        <input type="checkbox" id="c/c++" name="c/c++">
 
-                        <label for="python">Python</label>
-                        <input type="checkbox" id="python" name="python">
+                        <label for="reseaux">Réseaux</label>
+                        <input type="checkbox" id="reseaux" name="reseaux">
 
-                        <label for="python">Python</label>
-                        <input type="checkbox" id="python" name="python">
+                        <label for="base de données">Base de données</label>
+                        <input type="checkbox" id="base de données" name="base de données">
+
+                        <label for="mathematiques">Mathématiques</label>
+                        <input type="checkbox" id="mathematiques" name="mathematiques">
+
+                        <label for="linux">Linux</label>
+                        <input type="checkbox" id="linux" name="linux">
+
+                        <label for="git">Git</label>
+                        <input type="checkbox" id="git" name="git">
                     </div>
                 </fieldset>
 
-                <button class="blue-button">Soumettre</button>
+                <button class="blue-button" id="submission-button">Soumettre</button>
             </form>
         `
+        
+        document.getElementById("inscription-form").addEventListener("submit", (e) => {
+            e.preventDefault()
+            window.location.href = "../hub.html"
+        })
     }
 }
 
@@ -224,8 +247,12 @@ if(modify_pwd_form){
                         <input type="password" id="confirm-pwd" name="confirmation_mot_de_passe" required>
                     </div>
 
-                    <button class="blue-button">Soumettre</button>
+                    <button class="blue-button" id="new-password-submission">Soumettre</button>
             `
+            document.getElementById("modify-password-form").addEventListener("submit", (e) => {
+                e.preventDefault()
+                window.location.href = "../hub.html"
+            })
         }
     })
 }
@@ -242,7 +269,7 @@ class SideBar extends HTMLElement{
                     <img src="../static/images/message-bubble.png" alt="profil" class="side-bar-icon">
                     <p>Profil</p>
                 </div>
-                <div class="side-bar-button" path="#">
+                <div class="side-bar-button" path="./chat.html">
                     <img src="../static/images/user-icon.png" alt="messagerie" class="side-bar-icon">
                     <p>Messagerie</p>
                 </div>
@@ -306,6 +333,12 @@ class MatchBlock extends HTMLElement{
 }
 
 customElements.define("match-block", MatchBlock)
+
+document.body.addEventListener("click", (e) => {
+    if(e.target.classList.contains("mini-profile-pic")){
+        window.location.href = "profil-visiteur.html"
+    }
+})
 
 /* Fin main page*/
 
