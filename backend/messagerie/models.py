@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from backend.gestion_comptes.models import User
 
 class Conversation(models.Model):
     participants = models.ManyToManyField(User, related_name='conversations')
