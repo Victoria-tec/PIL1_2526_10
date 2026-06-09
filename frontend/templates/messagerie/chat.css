@@ -1,24 +1,28 @@
 /* =========================================================
    chat.css  –  Messagerie IFRI MentorLink
-   Palette : bleu #1a4a8a / marron #6b3a1f / orange #e07b39
+   Palette : bleu #1a4a8a  marron #6b3a1f  orange #e07b39
    ========================================================= */
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 :root {
-  --bleu:     #1a4a8a;
-  --bleu2:    #153d75;   /* hover bleu */
-  --marron:   #6b3a1f;
-  --orange:   #e07b39;
-  --orange2:  #c96a2b;   /* hover orange */
+  --bleu: #1a4a8a;
+  --bleu2: #153d75;
+  --marron: #6b3a1f;
+  --orange: #e07b39;
+  --orange2: #c96a2b;
 
-  --gris-bg:  #f3f4f6;
+  --gris-bg: #f3f4f6;
   --gris-brd: #dde1e8;
   --gris-txt: #8a93a6;
-  --blanc:    #ffffff;
-  --texte:    #1c2333;
+  --blanc: #ffffff;
+  --texte: #1c2333;
 
-  --shadow: 0 2px 8px rgba(0,0,0,.08);
+  --shadow: 0 2px 8px rgba(0, 0, 0, .08);
 }
 
 body {
@@ -29,9 +33,7 @@ body {
   overflow: hidden;
 }
 
-/* =========================================================
-   LAYOUT PRINCIPAL
-   ========================================================= */
+/* layout */
 .page-messagerie {
   display: flex;
   height: 100vh;
@@ -39,9 +41,7 @@ body {
   margin: 0 auto;
 }
 
-/* =========================================================
-   SIDEBAR
-   ========================================================= */
+/* ── SIDEBAR ── */
 .sidebar {
   width: 290px;
   min-width: 290px;
@@ -57,47 +57,28 @@ body {
   border-bottom: 1px solid var(--gris-brd);
 }
 
-/* ---- bouton retour ---- */
-.btn-retour {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--bleu);
-  background: #eaf0fb;
-  padding: 5px 12px 5px 8px;
-  border-radius: 6px;
-  margin-bottom: 12px;
-  transition: background .15s, color .15s;
-}
-
-.btn-retour:hover {
-  background: var(--bleu);
-  color: var(--blanc);
-}
-
 .sidebar-top h2 {
   font-size: 17px;
   font-weight: 700;
   color: var(--texte);
 }
 
-/* ---- liste des conversations ---- */
+/* liste convs */
 .liste-convs {
   flex: 1;
   overflow-y: auto;
   padding: 6px 0;
 }
 
-.liste-convs::-webkit-scrollbar { width: 4px; }
+.liste-convs::-webkit-scrollbar {
+  width: 4px;
+}
+
 .liste-convs::-webkit-scrollbar-thumb {
   background: var(--gris-brd);
   border-radius: 4px;
 }
 
-/* item de conversation */
 .conv-item {
   display: flex;
   align-items: center;
@@ -108,20 +89,26 @@ body {
   position: relative;
 }
 
-.conv-item:hover  { background: #f5f7fc; }
-.conv-item.active { background: #eaf0fb; }
+.conv-item:hover {
+  background: #f5f7fc;
+}
 
-/* trait bleu sur la gauche quand actif */
+.conv-item.active {
+  background: #eaf0fb;
+}
+
 .conv-item.active::before {
   content: '';
   position: absolute;
-  left: 0; top: 8px; bottom: 8px;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
   width: 3px;
   background: var(--bleu);
   border-radius: 0 3px 3px 0;
 }
 
-/* avatar */
+/* avatar générique */
 .av {
   width: 42px;
   height: 42px;
@@ -137,14 +124,19 @@ body {
 
 .av .online-dot {
   position: absolute;
-  bottom: 1px; right: 1px;
-  width: 10px; height: 10px;
+  bottom: 1px;
+  right: 1px;
+  width: 10px;
+  height: 10px;
   background: #3ecf7a;
   border-radius: 50%;
   border: 2px solid var(--blanc);
 }
 
-.conv-info { flex: 1; min-width: 0; }
+.conv-info {
+  flex: 1;
+  min-width: 0;
+}
 
 .conv-nom {
   font-weight: 700;
@@ -171,7 +163,6 @@ body {
   justify-content: space-between;
 }
 
-/* badge non lu – couleur orange */
 .badge {
   background: var(--orange);
   color: var(--blanc);
@@ -183,9 +174,7 @@ body {
   margin-left: 6px;
 }
 
-/* =========================================================
-   ZONE CHAT
-   ========================================================= */
+/* ── ZONE CHAT ── */
 .chat-zone {
   flex: 1;
   display: flex;
@@ -194,7 +183,6 @@ body {
   background: var(--gris-bg);
 }
 
-/* état vide */
 .etat-vide {
   flex: 1;
   display: flex;
@@ -205,10 +193,16 @@ body {
   color: var(--gris-txt);
 }
 
-.etat-vide svg { opacity: .3; }
-.etat-vide p   { font-size: 14px; font-weight: 600; }
+.etat-vide svg {
+  opacity: .3;
+}
 
-/* ---- header du chat ---- */
+.etat-vide p {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* header du chat */
 .chat-header {
   background: var(--blanc);
   border-bottom: 1px solid var(--gris-brd);
@@ -219,17 +213,37 @@ body {
   box-shadow: var(--shadow);
 }
 
-.chat-header .av { width: 38px; height: 38px; font-size: 13px; }
+.chat-header .av {
+  width: 38px;
+  height: 38px;
+  font-size: 13px;
+}
 
-.ch-info h3 { font-size: 15px; font-weight: 700; }
-.ch-info p  { font-size: 12px; color: var(--gris-txt); margin-top: 1px; }
+.ch-info h3 {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* statut hors ligne */
+.ch-info p {
+  font-size: 12px;
+  color: var(--gris-txt);
+  margin-top: 1px;
+}
+
+/* statut en ligne : vert */
+.ch-info p.en-ligne {
+  color: #3ecf7a;
+  font-weight: 600;
+}
 
 .btn-fermer {
   margin-left: auto;
   background: none;
   border: 1.5px solid var(--gris-brd);
   border-radius: 7px;
-  width: 32px; height: 32px;
+  width: 32px;
+  height: 32px;
   display: grid;
   place-items: center;
   cursor: pointer;
@@ -242,7 +256,7 @@ body {
   color: var(--marron);
 }
 
-/* ---- zone messages ---- */
+/* zone messages */
 .messages-zone {
   flex: 1;
   overflow-y: auto;
@@ -252,13 +266,16 @@ body {
   gap: 10px;
 }
 
-.messages-zone::-webkit-scrollbar { width: 4px; }
+.messages-zone::-webkit-scrollbar {
+  width: 4px;
+}
+
 .messages-zone::-webkit-scrollbar-thumb {
   background: var(--gris-brd);
   border-radius: 4px;
 }
 
-/* séparateur de date */
+/* séparateur date */
 .date-sep {
   text-align: center;
   font-size: 11.5px;
@@ -267,7 +284,9 @@ body {
   margin: 6px 0;
   position: relative;
 }
-.date-sep::before, .date-sep::after {
+
+.date-sep::before,
+.date-sep::after {
   content: '';
   position: absolute;
   top: 50%;
@@ -275,10 +294,16 @@ body {
   height: 1px;
   background: var(--gris-brd);
 }
-.date-sep::before { left: 0; }
-.date-sep::after  { right: 0; }
 
-/* bulle de message */
+.date-sep::before {
+  left: 0;
+}
+
+.date-sep::after {
+  right: 0;
+}
+
+/* ── BULLES ── */
 .msg {
   display: flex;
   align-items: flex-end;
@@ -286,14 +311,24 @@ body {
   max-width: 70%;
 }
 
-.msg.recu  { align-self: flex-start; }
-.msg.envoye {
-  align-self: flex-end;
-  flex-direction: row-reverse;
+/* message reçu : avatar GAUCHE, bulle DROITE de l'avatar */
+.msg.recu {
+  align-self: flex-start;
+  flex-direction: row;
+  /* avatar | bulle */
 }
 
+/* message envoyé : bulle GAUCHE, avatar DROITE */
+.msg.envoye {
+  align-self: flex-end;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+/* petit avatar dans les bulles */
 .msg-av {
-  width: 28px; height: 28px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -310,7 +345,7 @@ body {
   line-height: 1.55;
 }
 
-/* bulle reçue : fond blanc avec bordure subtile */
+/* bulle reçue : fond blanc */
 .msg.recu .bulle {
   background: var(--blanc);
   border: 1px solid var(--gris-brd);
@@ -318,30 +353,33 @@ body {
   box-shadow: var(--shadow);
 }
 
-/* bulle envoyée : bleu (couleur principale du site) */
+/* bulle envoyée : bleu */
 .msg.envoye .bulle {
   background: var(--bleu);
   color: var(--blanc);
   border-bottom-right-radius: 4px;
 }
 
+/* heure sous la bulle */
 .msg-meta {
   font-size: 10.5px;
   margin-top: 3px;
   color: var(--gris-txt);
 }
 
+/* heure des messages envoyés : à droite + couleur claire */
 .msg.envoye .msg-meta {
   text-align: right;
-  color: rgba(255,255,255,.65);
+  color: rgba(255, 255, 255, .7);
 }
 
-/* double coche lecture */
-.vu { font-size: 11px; margin-left: 2px; color: #57d9a3; }
+.vu {
+  font-size: 11px;
+  margin-left: 2px;
+  color: #57d9a3;
+}
 
-/* =========================================================
-   BARRE D'ENVOI
-   ========================================================= */
+/* ── BARRE D'ENVOI ── */
 .barre-envoi {
   background: var(--blanc);
   border-top: 1px solid var(--gris-brd);
@@ -367,11 +405,13 @@ body {
   color: var(--texte);
 }
 
-.champ-msg:focus { border-color: var(--bleu); }
+.champ-msg:focus {
+  border-color: var(--bleu);
+}
 
-/* bouton envoyer – orange comme les CTA du site */
 .btn-envoyer {
-  width: 40px; height: 40px;
+  width: 40px;
+  height: 40px;
   background: var(--orange);
   border: none;
   border-radius: 10px;
@@ -383,19 +423,29 @@ body {
   flex-shrink: 0;
 }
 
-.btn-envoyer:hover  { background: var(--orange2); }
-.btn-envoyer:active { transform: scale(.93); }
+.btn-envoyer:hover {
+  background: var(--orange2);
+}
 
-/* =========================================================
-   RESPONSIVE MOBILE
-   ========================================================= */
+.btn-envoyer:active {
+  transform: scale(.93);
+}
+
+/* responsive mobile */
 @media (max-width: 660px) {
-  .page-messagerie { max-width: 100%; }
+  .page-messagerie {
+    max-width: 100%;
+  }
 
-  /* par défaut on montre la sidebar, on cache le chat */
-  .chat-zone { display: none; }
+  .chat-zone {
+    display: none;
+  }
 
-  /* quand une conv est ouverte on fait l'inverse */
-  .page-messagerie.conv-ouverte .sidebar    { display: none; }
-  .page-messagerie.conv-ouverte .chat-zone  { display: flex; }
+  .page-messagerie.conv-ouverte .sidebar {
+    display: none;
+  }
+
+  .page-messagerie.conv-ouverte .chat-zone {
+    display: flex;
+  }
 }

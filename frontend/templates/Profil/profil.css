@@ -1,0 +1,400 @@
+
+/* =========================================================
+   profil.css  –  Page Profil IFRI MentorLink
+   Palette : bleu #1a4a8a  marron #6b3a1f  orange #e07b39
+   ========================================================= */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bleu:    #1a4a8a;
+  --bleu2:   #153d75;
+  --marron:  #6b3a1f;
+  --orange:  #e07b39;
+  --orange2: #c96a2b;
+
+  --gris-bg:  #f3f4f6;
+  --gris-brd: #dde1e8;
+  --gris-txt: #8a93a6;
+  --blanc:    #ffffff;
+  --texte:    #1c2333;
+
+  --shadow: 0 4px 16px rgba(0,0,0,.09);
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background: var(--gris-bg);
+  color: var(--texte);
+  min-height: 100vh;
+  padding: 32px 16px;
+}
+
+/* ── PAGE CENTREE ── */
+.page {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* ── CARTE PRINCIPALE ── */
+.carte-profil {
+  background: var(--blanc);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--gris-brd);
+  overflow: hidden;
+}
+
+/* ── EN-TÊTE ── */
+.entete {
+  background: var(--bleu);
+  padding: 32px 28px 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--orange);
+  color: var(--blanc);
+  font-size: 22px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border: 3px solid rgba(255,255,255,.3);
+  letter-spacing: .5px;
+}
+
+.entete-info h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--blanc);
+}
+
+.badge-filiere {
+  display: inline-block;
+  margin-top: 6px;
+  background: rgba(255,255,255,.18);
+  color: rgba(255,255,255,.9);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.25);
+}
+
+/* ── SECTIONS ── */
+.section {
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--gris-brd);
+}
+
+.section:last-of-type { border-bottom: none; }
+
+.section-titre {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bleu);
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* grille infos de contact */
+.grille-infos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.info-bloc {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.info-label {
+  font-size: 11.5px;
+  color: var(--gris-txt);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.info-val {
+  font-size: 14px;
+  color: var(--texte);
+  font-weight: 600;
+}
+
+/* ── TAGS ── */
+.tags-zone {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 5px 13px;
+  border-radius: 20px;
+}
+
+/* compétences : fond bleu clair */
+.tag-comp {
+  background: #e8f0fb;
+  color: var(--bleu);
+  border: 1px solid #c5d5f0;
+}
+
+/* lacunes : fond orange clair */
+.tag-lacune {
+  background: #fdf0e6;
+  color: var(--marron);
+  border: 1px solid #f0d0b0;
+}
+
+/* ── BOUTONS D'ACTION ── */
+.actions {
+  padding: 20px 28px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--gris-brd);
+}
+
+.btn-modifier, .btn-mdp {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  border: none;
+}
+
+/* bouton modifier profil : bleu */
+.btn-modifier {
+  background: var(--bleu);
+  color: var(--blanc);
+}
+.btn-modifier:hover { background: var(--bleu2); }
+
+/* bouton mot de passe : contour orange */
+.btn-mdp {
+  background: var(--blanc);
+  color: var(--orange);
+  border: 1.5px solid var(--orange);
+}
+.btn-mdp:hover { background: #fdf0e6; }
+
+/* =========================================================
+   OVERLAY + MODALS
+   ========================================================= */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 100;
+}
+
+.overlay.visible { display: block; }
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(.97);
+  width: 92%;
+  max-width: 540px;
+  background: var(--blanc);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.18);
+  z-index: 101;
+  transition: transform .15s;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal.visible {
+  display: block;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.modal-header {
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid var(--gris-brd);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--texte);
+}
+
+.modal-fermer {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--gris-txt);
+  padding: 4px;
+  border-radius: 6px;
+  transition: color .15s;
+}
+.modal-fermer:hover { color: var(--marron); }
+
+.modal-body {
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-footer {
+  padding: 14px 22px 18px;
+  border-top: 1px solid var(--gris-brd);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* champs du formulaire */
+.champ-groupe { display: flex; gap: 12px; }
+.champ-groupe.deux-col > .champ { flex: 1; }
+
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.champ label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gris-txt);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.champ input,
+.champ select {
+  border: 1.5px solid var(--gris-brd);
+  border-radius: 8px;
+  padding: 8px 11px;
+  font-family: inherit;
+  font-size: 13.5px;
+  color: var(--texte);
+  outline: none;
+  transition: border-color .2s;
+  background: var(--blanc);
+}
+
+.champ input:focus,
+.champ select:focus { border-color: var(--bleu); }
+
+/* zone de tags avec input intégré */
+.tag-input-zone {
+  border: 1.5px solid var(--gris-brd);
+  border-radius: 8px;
+  padding: 7px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  cursor: text;
+  transition: border-color .2s;
+  min-height: 42px;
+}
+
+.tag-input-zone:focus-within { border-color: var(--bleu); }
+
+.tag-input-zone .tag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tag-input-zone .tag button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: 13px;
+  line-height: 1;
+  opacity: .7;
+  padding: 0;
+}
+.tag-input-zone .tag button:hover { opacity: 1; }
+
+.tag-input {
+  border: none !important;
+  outline: none !important;
+  padding: 2px 4px !important;
+  font-size: 13px !important;
+  flex: 1;
+  min-width: 120px;
+  background: transparent !important;
+}
+
+/* boutons du modal */
+.btn-annuler {
+  background: none;
+  border: 1.5px solid var(--gris-brd);
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--gris-txt);
+  cursor: pointer;
+  transition: all .15s;
+}
+.btn-annuler:hover { border-color: var(--marron); color: var(--marron); }
+
+.btn-sauver {
+  background: var(--bleu);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 22px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--blanc);
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-sauver:hover { background: var(--bleu2); }
+
+/* message d'erreur */
+.msg-erreur {
+  font-size: 13px;
+  color: #c0392b;
+  font-weight: 600;
+  background: #fdecea;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 3px solid #c0392b;
+}
+
+/* responsive */
+@media (max-width: 500px) {
+  .grille-infos        { grid-template-columns: 1fr; }
+  .champ-groupe.deux-col { flex-direction: column; }
+  .entete { padding: 22px 18px; }
+  .section, .actions { padding-left: 18px; padding-right: 18px; }
+}

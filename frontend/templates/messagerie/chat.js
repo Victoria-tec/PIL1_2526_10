@@ -1,34 +1,32 @@
 // chat.js  –  Messagerie IFRI MentorLink
-// Ce fichier gère l'affichage des conversations et l'envoi de messages.
-// Dans la version finale, les données viennent de l'API Flask via fetch().
 
-// -------------------------------------------------------
-// couleurs pour les avatars (on en choisit une selon le nom)
-// -------------------------------------------------------
 const COULEURS_AV = [
-  '#1a4a8a',   // bleu principal
-  '#6b3a1f',   // marron
-  '#e07b39',   // orange
-  '#2e7d52',   // vert foncé
-  '#7b3fa0',   // violet
-  '#b04040',   // rouge brique
+  '#1a4a8a',
+  '#6b3a1f',
+  '#e07b39',
+  '#2e7d52',
+  '#7b3fa0',
+  '#b04040',
 ];
 
+// couleur fixe selon le nom
 function couleurAvatar(nom) {
-  // petite astuce : on additionne les codes ASCII du nom
-  // pour toujours avoir la même couleur pour la même personne
   let total = 0;
   for (let i = 0; i < nom.length; i++) total += nom.charCodeAt(i);
   return COULEURS_AV[total % COULEURS_AV.length];
 }
 
+// initiales depuis nom + prénom
 function initiales(nom, prenom) {
   return (nom.charAt(0) + (prenom ? prenom.charAt(0) : '')).toUpperCase();
 }
 
+// couleur fixe pour MOI (toujours la même)
+const COULEUR_MOI = '#1a4a8a';
+const INI_MOI = 'Moi';
+
 // -------------------------------------------------------
 // DONNÉES DE TEST
-// (à remplacer par un fetch('/api/messagerie/conversations'))
 // -------------------------------------------------------
 const conversations = [
   {
@@ -96,26 +94,22 @@ const conversations = [
   }
 ];
 
-// -------------------------------------------------------
-// état global
-// -------------------------------------------------------
 let convActuelle = null;
 
 // -------------------------------------------------------
-// REMPLIR LA LISTE DES CONVERSATIONS
+// LISTE DES CONVERSATIONS
 // -------------------------------------------------------
 function afficherListeConvs() {
   const conteneur = document.getElementById('listeConvs');
   conteneur.innerHTML = '';
 
-  conversations.forEach(conv => {
+  conversations.forEach(function (conv) {
     const actif = convActuelle && convActuelle.id === conv.id ? ' active' : '';
     const couleur = couleurAvatar(conv.nom);
     const ini = initiales(conv.nom, conv.prenom);
 
     const item = document.createElement('div');
     item.className = 'conv-item' + actif;
-    item.dataset.id = conv.id;
 
     item.innerHTML =
       '<div class="av" style="background:' + couleur + '">'
@@ -135,10 +129,7 @@ function afficherListeConvs() {
       + '</div>'
       + '</div>';
 
-    item.addEventListener('click', function () {
-      ouvrirConversation(conv.id);
-    });
-
+    item.addEventListener('click', function () { ouvrirConversation(conv.id); });
     conteneur.appendChild(item);
   });
 }
@@ -151,30 +142,35 @@ function ouvrirConversation(convId) {
   if (!conv) return;
 
   convActuelle = conv;
-  conv.non_lu = 0;  // marquer comme lu
+  conv.non_lu = 0;
 
-  // header
+  // -- header --
   const couleur = couleurAvatar(conv.nom);
   const chAv = document.getElementById('chAv');
   chAv.style.background = couleur;
   chAv.textContent = initiales(conv.nom, conv.prenom);
 
   document.getElementById('chNom').textContent = conv.prenom + ' ' + conv.nom;
-  document.getElementById('chStatut').textContent = conv.en_ligne
-    ? '● En ligne — ' + conv.filiere
-    : 'Hors ligne — ' + conv.filiere;
 
-  // afficher les zones cachées
+  // statut : en ligne en vert, hors ligne en gris (sans "depuis quand")
+  const statutEl = document.getElementById('chStatut');
+  if (conv.en_ligne) {
+    statutEl.textContent = '● En ligne';
+    statutEl.className = 'en-ligne';
+  } else {
+    statutEl.textContent = 'Hors ligne';
+    statutEl.className = '';
+  }
+
   document.getElementById('etatVide').style.display = 'none';
   document.getElementById('chatHeader').style.display = 'flex';
   document.getElementById('messagesZone').style.display = 'flex';
   document.getElementById('barreEnvoi').style.display = 'flex';
 
-  // sur mobile : basculer l'affichage
   document.querySelector('.page-messagerie').classList.add('conv-ouverte');
 
   afficherMessages(conv);
-  afficherListeConvs();  // pour enlever le badge non-lu
+  afficherListeConvs();
 
   document.getElementById('champMsg').focus();
 }
@@ -186,11 +182,13 @@ function afficherMessages(conv) {
   const zone = document.getElementById('messagesZone');
   zone.innerHTML = '';
 
-  const couleur = couleurAvatar(conv.nom);
-  const ini = initiales(conv.nom, conv.prenom);
+  // couleur et initiales de l'interlocuteur
+  const couleurLui = couleurAvatar(conv.nom);
+  const iniLui = initiales(conv.nom, conv.prenom);
 
   conv.messages.forEach(function (msg, idx) {
-    // séparateur de date si besoin
+
+    // séparateur de date
     if (msg.sep) {
       const sep = document.createElement('div');
       sep.className = 'date-sep';
@@ -205,27 +203,27 @@ function afficherMessages(conv) {
 
     if (msg.envoye) {
       div.innerHTML =
-        '<div>'
+        '<div style="display:flex;flex-direction:column;align-items:flex-end;flex:1">'
         + '<div class="bulle">' + msg.texte + '</div>'
-        + '<div class="msg-meta">'
+        + '<div class="msg-meta" style="text-align:right;color:var(--gris-txt)">'
         + msg.heure
         + (dernier ? ' <span class="vu">✓✓</span>' : '')
         + '</div>'
         + '</div>'
-        + '<div class="msg-av" style="background:' + couleur + '">Moi</div>';
+        + '<div class="msg-av" style="background:' + COULEUR_MOI + ';margin-left:7px;flex-shrink:0">Moi</div>';
+
     } else {
       div.innerHTML =
-        '<div class="msg-av" style="background:' + couleur + '">' + ini + '</div>'
-        + '<div>'
+        '<div class="msg-av" style="background:' + couleurLui + ';margin-right:7px;flex-shrink:0">' + iniLui + '</div>'
+        + '<div style="display:flex;flex-direction:column;align-items:flex-start;flex:1">'
         + '<div class="bulle">' + msg.texte + '</div>'
-        + '<div class="msg-meta">' + msg.heure + '</div>'
+        + '<div class="msg-meta" style="color:var(--gris-txt)">' + msg.heure + '</div>'
         + '</div>';
     }
 
     zone.appendChild(div);
   });
 
-  // scroller tout en bas
   zone.scrollTop = zone.scrollHeight;
 }
 
@@ -253,23 +251,22 @@ function envoyerMessage() {
   afficherMessages(convActuelle);
   afficherListeConvs();
 
-  // simulation d'une réponse (à enlever dans la vraie version avec WebSocket)
   simulerReponse();
 }
 
-// réponse automatique de test
+// réponse auto (test seulement)
 function simulerReponse() {
   const reponses = [
     'Ok merci !',
     "D'accord, je note.",
     'Ah oui je vois 👍',
-    "Je regarderai ça demain et je te dis.",
-    'Tu peux m\'envoyer un exemple ?',
-    'Hmm j\'avais pas pensé à ça…',
-    'Super, ça marche pour moi !'
+    "Je regarderai ça demain.",
+    "Tu peux m'envoyer un exemple ?",
+    "J'avais pas pensé à ça…",
+    'Super, ça marche !'
   ];
 
-  const delai = 1400 + Math.random() * 1600;  // 1.4s à 3s
+  const delai = 1400 + Math.random() * 1600;
 
   setTimeout(function () {
     if (!convActuelle) return;
@@ -290,7 +287,7 @@ function simulerReponse() {
 }
 
 // -------------------------------------------------------
-// FERMER LE CHAT (surtout utile sur mobile)
+// FERMER LE CHAT
 // -------------------------------------------------------
 function fermerChat() {
   convActuelle = null;
@@ -303,10 +300,9 @@ function fermerChat() {
 }
 
 // -------------------------------------------------------
-// UTILITAIRES CLAVIER / TEXTAREA
+// CLAVIER + TEXTAREA
 // -------------------------------------------------------
 function gererTouche(e) {
-  // Entrée = envoyer, Shift+Entrée = saut de ligne
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
     envoyerMessage();
