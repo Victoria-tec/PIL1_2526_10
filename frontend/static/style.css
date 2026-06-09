@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
 
 body{
     box-sizing: border-box;
@@ -15,7 +16,7 @@ body{
 :root{
     --bleu_pale: #9dc7e5;
     --bleu: #163fa0;
-    --orange: #f59528;
+    --orange: #f59e3c;
     --marron: #6F4E37;
     --gris: rgb(160, 157, 157);
     --orange_shadow: 0 6px 15px 2px #B45309;
@@ -77,6 +78,7 @@ body{
 .blue-button:hover{
     box-shadow: var(--blue_shadow);
     transform: translateY(-2px);
+    cursor: pointer;
 }
 
 .pale-blue-button{
@@ -92,6 +94,7 @@ body{
 .pale-blue-button:hover{
     box-shadow: var(--blue_shadow);
     transform: translateY(-2px);
+    cursor: pointer;
 }
 
 .orange-button{
@@ -108,6 +111,7 @@ body{
 .orange-button:hover{
     box-shadow: var(--orange_shadow);
     transform: translateY(-2px);
+    cursor: pointer;
 }
 
 .brown-button{
@@ -372,14 +376,38 @@ side-bar{
     gap: 20px;
     background-color: var(--bleu);
     align-self: stretch;
-    width: 12%;
+    width: 16%;
+    font-weight: 700;
+    font-family: 'Sora', sans-serif;
+}
+
+.side-bar-button{
+    height: var(--height_buttons);
+    min-width: var(--min_width_buttons);
+    border-style: none;
+    border-radius: 10px;
+    background-color: var(--bleu_pale);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 2px;
+    transition: 0.1s ease;
+}
+
+.side-bar-button:hover{
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: var(--blue_shadow);
 }
 
 .profile-pic-box{
+    background-size: cover;
+    background-image: url("./images/user-icon.png");
     height: 120px;
-    width: 80%;
+    width: 65%;
     border-radius: 50%;
-    background-color: white;
 }
 
 .side-bar-icon{
@@ -392,7 +420,7 @@ side-bar > p{
     text-align: center; 
     color: white; 
     font-style: italic;
-    font-weight: 200;
+    font-weight: 400;
 }
 
 .body-with-side-bar{
@@ -411,18 +439,31 @@ side-bar > p{
 }
 
 .welcome-message{
+    font-family: 'Sora', sans-serif;
     display: flex; 
     flex-direction: column;
     align-items: left; 
     color: black; 
     margin-bottom: 0;
     margin-top: 0;
-    animation: reverse-vertical-apparition 0.8s ease;
 }
 
 .welcome-message *{
     margin-top: 0;
     margin-bottom: 0;
+}
+
+.add-buttons{
+    align-self: center;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.add-buttons button{
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: large;
 }
 
 .category{
@@ -452,20 +493,28 @@ side-bar > p{
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    gap: 20px;
+}
+
+.category-blocks-box >*{
+    margin-right: 10%;
 }
 
 match-block{
     display: flex;
     flex-direction: column;
     border-radius: 15px;
-    width: 30%;
-    height: 150px;
+    width: 40%;
+    height: 200px;
     background-color: white;
     margin-top: 10px;
     box-shadow: var(--grey_shadow);
     animation: vertical-apparition 0.8s ease;
     color: white;
+    transition: 0.3s ease;
+}
+
+match-block:hover{
+    transform: translateY(-4px);
 }
 
 match-block h4{
@@ -474,6 +523,10 @@ match-block h4{
     align-self: center;
     margin-top: 5px;
     margin-bottom: 0;
+}
+
+#attente-reponse match-block{
+    margin-bottom: 20px;
 }
 
 .block-half{
@@ -495,7 +548,8 @@ match-block h4{
 }
 
 .mini-profile-pic{
-    background-color: white;
+    background-size: cover;
+    background-image: url("./images/user-icon.png");
     border-radius: 50%;
     height: 90%;
     width: 40%;

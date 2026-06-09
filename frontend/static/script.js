@@ -238,28 +238,40 @@ class SideBar extends HTMLElement{
         this.innerHTML = `
                 <div class="profile-pic-box"></div>
                 <div style="text-align: center"><p style="margin-top: 0; margin-bottom: 0; color: white;">${user_name}</p></div>
-                <div class="brown-button">
+                <div class="side-bar-button" path="#">
                     <img src="../static/images/message-bubble.png" alt="profil" class="side-bar-icon">
                     <p>Profil</p>
                 </div>
-                <div class="brown-button">
-                    <img src="../static/images/help.png" alt="messagerie" class="side-bar-icon">
+                <div class="side-bar-button" path="#">
+                    <img src="../static/images/user-icon.png" alt="messagerie" class="side-bar-icon">
                     <p>Messagerie</p>
                 </div>
-                <div class="brown-button">
-                    <img src="../static/images/annonce.png" alt="create" class="side-bar-icon">
-                    <p>Créer</p>
-                </div>
-                <div class="brown-button">
-                    <img src="../static/images/message-bubble.png" alt="deconnexion" class="side-bar-icon">
-                    <p>Déconnexion</p>
+                <div class="side-bar-button" path="./base.html">
+                    <img src="../static/images/exit.png" alt="deconnexion" class="side-bar-icon">
+                    <p>Accueil</p>
                 </div>
                 <p>IFRI, Nous visons l'excellence !</p>
         `
+        setTimeout(() => {
+            this.querySelectorAll(".side-bar-button").forEach((button) =>{
+                button.addEventListener("click", ()=>{
+                    window.location.href = button.getAttribute("path")
+                })
+            })
+        }, 0)
     }
 }
 
 customElements.define("side-bar", SideBar)
+
+let creation_btn = document.getElementById("creation-button")
+
+if(creation_btn){
+    creation_btn.addEventListener("click", () =>{
+        window.location.href = "formulaire.html"
+    })
+
+}
 
 class MatchBlock extends HTMLElement{
     connectedCallback(){
@@ -283,11 +295,11 @@ class MatchBlock extends HTMLElement{
                             <div class="mini-profile-pic"></div>
                         </div>
                     </div>
-                    <h4><a href="#">--${topic}--</a></h4>
+                    <h4>--${topic}--</h4>
                     <div style="display: flex; gap: 3px; align-items: center; justify-content: center; margin-top: 0">
                         <div class="compatibility" style="width: 40%; height: 27%; height: 40%; margin-top: 0"><h5>Compatibilité : ${compatibility_score}%</h5></div>
-                        <button class="validation" style="border-style: none; width: 27%; height: 40%; margin-top: 0"><h5>${status==="validated" ? `Conversation` : `Valider`}</h5></button>
-                        <button class="validation" style="border-style: none; width: 27%; height: 40%; margin-top: 0; background-color: rgb(189, 22, 22);"><h5>${status==="validated" ? `Achever` : `Rejeter`}</h5></button>
+                        <button class="validation" style="border-style: none; width: 27%; height: 40%; margin-top: 0"><h5>${status==="validated" ? `Conversation` : status==="waiting-for-validation" ? `Annuler` : `Valider`}</h5></button>
+                        ${status !=="waiting-for-validation" ? `<button class="validation" style="border-style: none; width: 27%; height: 40%; margin-top: 0; background-color: rgb(189, 22, 22);"><h5>${status==="validated" ? `Achever` : `Rejeter`}</h5></button>` : ``}
                     </div>
         `
     }
@@ -296,6 +308,15 @@ class MatchBlock extends HTMLElement{
 customElements.define("match-block", MatchBlock)
 
 /* Fin main page*/
+
+/*Page formulaire de soumission*/
+
+let creation_form = document.getElementById("formulaire-offre-demande")
+if(creation_form){
+    creation_form.addEventListener("submit", () =>{
+        window.location.href = "resultats_matching.html"
+    })
+}
 
 /*Page résultats matching*/
 
@@ -312,7 +333,7 @@ class MatchProposition extends HTMLElement{
                         <h3>${match_nom} <br> ${match_prenom}</h3>
                         <div><h5 style="font-style: italic;">${match_niveau}</h5></div>
                     </div>
-                    <button class="blue-button" id="accept-match">Matcher</button>
+                    <button class="blue-button accept-match">Matcher</button>
                     <div style="display: flex; flex-direction: column; align-items: center; width: 30%; height: 100%; margin-left: auto;">
                         <div class="circle-out">
                             <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100" height="100">
@@ -333,6 +354,13 @@ class MatchProposition extends HTMLElement{
                 </div>
         `
         this.querySelector("circle").style.strokeDashoffset = 262-262*(score/100)
+
+        setTimeout(() => {
+            this.querySelector(".accept-match").addEventListener("click", () =>{
+                window.location.href = "hub.html"
+            })
+        }, 0)
+
     }
 }
 
