@@ -273,9 +273,9 @@ body {
 }
 
 .tag-lacune {
-  background: #fdf0e6;
-  color: var(--marron);
-  border: 1px solid #f0d0b0;
+  background: var(--orange);
+  color: var(--blanc);
+  border: 1px solid var(--orange2);
 }
 
 /* bouton × pour supprimer un tag */
@@ -316,10 +316,6 @@ body {
   cursor: pointer;
   transition: all .15s;
   align-self: flex-start;
-}
-
-.btn-mdp:hover {
-  background: #fdf0e6;
 }
 
 /* ─────────────────────────────────────
@@ -486,6 +482,15 @@ body {
   background: #eff6ff;
 }
 
+.liste-checkbox.lacune-checkbox {
+  border: 1.5px solid var(--orange2);
+  background: #fdf0e6;
+}
+
+.lacune-checkbox .checkbox-item input[type="checkbox"] {
+  accent-color: var(--orange2);
+}
+
 .checkbox-item {
   display: flex;
   align-items: center;
@@ -501,4 +506,37 @@ body {
   width: 15px;
   height: 15px;
   cursor: pointer;
+}
+
+.btn-enregistrer-comp {
+  margin-top: 8px;
+  background: var(--bleu);
+  color: var(--blanc);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+  align-self: flex-start;
+}
+
+.btn-enregistrer-lacune {
+  margin-top: 8px;
+  background: var(--orange2);
+  color: var(--blanc);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+  align-self: flex-start;
+}
+.titre-lacune {
+  color: var(--orange);
 }

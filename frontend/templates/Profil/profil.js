@@ -1,24 +1,24 @@
- // profil.js  –  Page Profil IFRI MentorLink
+// profil.js  –  Page Profil IFRI MentorLink
 
 // ──────────────────────────────────────────
 // DONNÉES (dans la vraie version : fetch API)
 // ──────────────────────────────────────────
 const profil = {
-  nom:     'Koffi',
-  prenom:  'Aimé',
-  email:   'aime.koffi@etud.ifri.uac.bj',
-  tel:     '+229 01 00 00 00',
+  nom: 'Koffi',
+  prenom: 'Aimé',
+  email: 'aime.koffi@etud.ifri.uac.bj',
+  tel: '+229 01 00 00 00',
   filiere: 'IA',
-  niveau:  'L2'
+  niveau: 'L2'
 };
 
 // labels lisibles pour filière et niveau
 const labelFiliere = {
-  IA:     'Intelligence Artificielle (IA)',
-  IM:     'Ingénierie Mathématique (IM)',
-  GL:     'Génie Logiciel (GL)',
+  IA: 'Intelligence Artificielle (IA)',
+  IM: 'Ingénierie Mathématique (IM)',
+  GL: 'Génie Logiciel (GL)',
   SE_IoT: 'Systèmes Embarqués & IoT',
-  SI:     "Systèmes d'Information (SI)"
+  SI: "Systèmes d'Information (SI)"
 };
 
 const labelNiveau = {
@@ -35,7 +35,7 @@ const labelNiveau = {
 
 // ouvre le champ d'édition pour un champ donné
 function editer(champ) {
-  const aff   = document.getElementById('aff'   + majuscule(champ));
+  const aff = document.getElementById('aff' + majuscule(champ));
   const input = document.getElementById('input' + majuscule(champ));
   const ligne = aff.parentElement;  // .champ-ligne
 
@@ -52,7 +52,7 @@ function editer(champ) {
 
 // sauvegarde quand on quitte le champ (blur) ou appuie sur Entrée
 function sauverChamp(champ) {
-  const aff   = document.getElementById('aff'   + majuscule(champ));
+  const aff = document.getElementById('aff' + majuscule(champ));
   const input = document.getElementById('input' + majuscule(champ));
   const ligne = aff ? aff.parentElement : null;
 
@@ -66,16 +66,16 @@ function sauverChamp(champ) {
   // mettre à jour l'affichage
   if (champ === 'filiere') {
     aff.textContent = labelFiliere[input.value] || input.value;
-    profil.filiere  = input.value;
+    profil.filiere = input.value;
     // mettre à jour la sidebar aussi
     mettreAJourSidebar();
   } else if (champ === 'niveau') {
     aff.textContent = labelNiveau[input.value] || input.value;
-    profil.niveau   = input.value;
+    profil.niveau = input.value;
     mettreAJourSidebar();
   } else {
-    aff.textContent   = valeur;
-    profil[champ]     = valeur;
+    aff.textContent = valeur;
+    profil[champ] = valeur;
   }
 
   // si c'est nom ou prénom, mettre à jour l'avatar et la sidebar
@@ -101,7 +101,7 @@ function enterChamp(e, champ) {
 }
 
 function annulerEdition(champ) {
-  const aff   = document.getElementById('aff'   + majuscule(champ));
+  const aff = document.getElementById('aff' + majuscule(champ));
   const input = document.getElementById('input' + majuscule(champ));
   const ligne = aff.parentElement;
 
@@ -121,22 +121,21 @@ const optionsLacune = ['Réseaux', 'Bases de données', 'Algorithmique', 'Mathé
 
 function activerTags(type) {
   const zone = document.getElementById('zone' + majuscule(type));
-  const add  = document.getElementById('add'  + majuscule(type));
-
-  // montrer les boutons ×
-  zone.querySelectorAll('.tag-x').forEach(function(b) {
-    b.classList.remove('cache-tag-x');
-  });
+  const add = document.getElementById('add' + majuscule(type));
 
   // construire la liste de checkboxes si pas encore fait
   if (!add.querySelector('.liste-checkbox')) {
     const liste = document.createElement('div');
     liste.className = 'liste-checkbox';
 
+    // si c'est lacune, on ajoute la classe orange
+    if (type === 'lacune') {
+      liste.classList.add('lacune-checkbox');
+    }
+
     const options = type === 'comp' ? optionsComp : optionsLacune;
 
-    options.forEach(function(opt) {
-      // récupérer les tags déjà cochés
+    options.forEach(function (opt) {
       const dejaCoche = zone.querySelector('[data-val="' + opt + '"]') !== null;
 
       const label = document.createElement('label');
@@ -147,32 +146,42 @@ function activerTags(type) {
       cb.value = opt;
       cb.checked = dejaCoche;
 
-      cb.addEventListener('change', function() {
-        if (cb.checked) {
-          // ajouter le tag s'il n'existe pas
-          if (!zone.querySelector('[data-val="' + opt + '"]')) {
-            const classeTag = type === 'comp' ? 'tag-comp' : 'tag-lacune';
-            const span = document.createElement('span');
-            span.className = 'tag ' + classeTag;
-            span.setAttribute('data-val', opt);
-            span.innerHTML = opt + ' <button onclick="supprimerTag(\'' + type + '\',\'' + opt + '\')" class="tag-x">×</button>';
-            zone.appendChild(span);
-          }
-        } else {
-          // supprimer le tag
-          supprimerTag(type, opt);
-        }
-      });
-
       label.appendChild(cb);
       label.appendChild(document.createTextNode(' ' + opt));
       liste.appendChild(label);
     });
 
+    // bouton enregistrer
+    const btnClass = type === 'comp' ? 'btn-enregistrer-comp' : 'btn-enregistrer-lacune';
+    const btn = document.createElement('button');
+    btn.className = btnClass;
+    btn.textContent = 'Enregistrer';
+
+    btn.addEventListener('click', function () {
+      // vider tous les tags existants dans la zone
+      zone.innerHTML = '';
+
+      // relire toutes les cases cochées et recréer les tags
+      const classeTag = type === 'comp' ? 'tag-comp' : 'tag-lacune';
+      liste.querySelectorAll('input[type="checkbox"]').forEach(function (cb) {
+        if (cb.checked) {
+          const span = document.createElement('span');
+          span.className = 'tag ' + classeTag;
+          span.setAttribute('data-val', cb.value);
+          span.textContent = cb.value;
+          zone.appendChild(span);
+        }
+      });
+
+      // cacher la liste
+      add.classList.add('cache');
+    });
+
     add.appendChild(liste);
+    add.appendChild(btn);
   }
 
-  // montrer la zone d'ajout
+  // montrer la zone
   add.classList.remove('cache');
 }
 
@@ -202,7 +211,7 @@ function ajouterTag(e, type) {
 // supprimer un tag
 function supprimerTag(type, valeur) {
   const zone = document.getElementById('zone' + majuscule(type));
-  zone.querySelectorAll('.tag').forEach(function(tag) {
+  zone.querySelectorAll('.tag').forEach(function (tag) {
     if (tag.getAttribute('data-val') === valeur) {
       tag.remove();
     }
