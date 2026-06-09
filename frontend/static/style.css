@@ -154,7 +154,7 @@ page-header{
 }
 
 .header-buttons > a {
-    color: white;
+    color: black;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -169,7 +169,7 @@ page-header{
 }
 
 .header-buttons > a:hover{
-    box-shadow: var(--orange_shadow);
+    box-shadow: var(--blue_shadow);
     transform: translateY(-2px);
 }
 
@@ -217,6 +217,11 @@ page-footer div{
 
 .presentation-block h3{
     font-size: 20px;
+}
+
+.presentation-block a{
+    font-weight: 600;
+    font-size: large;
 }
 
 page-block{

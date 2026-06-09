@@ -29,10 +29,9 @@ class PageFooter extends HTMLElement{
         this.innerHTML = `
                 <h4>Nous contacter</h4>
                 <div>
-                    <a href="#">WhatsApp</a>
-                    <a href="#">Facebook</a>
+                    <a href="#">IFRIMentorLink@gmail.com</a>
                 </div>
-                <h4>Copyright IFRI - 2026</h4>
+                <h4>© 2026 IFRI MentorLink - Tous droits réservés - Mentions légales - Politique de confidentialité</h4>
         `
     }
 }
@@ -90,34 +89,11 @@ pwd_submission_error_message.classList.add("pwd-different")
 
 const password_gestion = (pwd, confirmed_pwd, e) => {
     if (pwd !== confirmed_pwd){
-        pwd_submission.appendChild(pwd_submission_error_message)
         e.preventDefault()
+        pwd_submission.appendChild(pwd_submission_error_message)
+        return
     }else{
         pwd_submission_error_message.remove()
-    }
-}
-
-if(pwd_submission){
-    let submitted_password = ""
-    let confirmed_submitted_password = ""
-
-    document.getElementById("pwd").addEventListener("input", () =>{
-        submitted_password = document.getElementById("pwd").value
-    })
-
-    document.getElementById("confirm-pwd").addEventListener("input", () =>{
-        confirmed_submitted_password = document.getElementById("confirm-pwd").value
-    })
-
-    inscription_form.querySelector(".blue-button").addEventListener("click", (e) =>{
-        password_gestion(submitted_password, confirmed_submitted_password, e)
-    })
-}
-
-/*Fin gestion mot de passe*/
-
-if(inscription_form){
-    inscription_form.addEventListener("submit", (e) =>{
         e.preventDefault()
 
         inscription_text.textContent = "Finaliser votre inscription"
@@ -193,8 +169,28 @@ if(inscription_form){
                 <button class="blue-button">Soumettre</button>
             </form>
         `
+    }
+}
+
+if(pwd_submission){
+    let submitted_password = ""
+    let confirmed_submitted_password = ""
+
+    document.getElementById("pwd").addEventListener("input", () =>{
+        submitted_password = document.getElementById("pwd").value
+    })
+
+    document.getElementById("confirm-pwd").addEventListener("input", () =>{
+        confirmed_submitted_password = document.getElementById("confirm-pwd").value
+    })
+
+    inscription_form.addEventListener("submit", (e) =>{
+        password_gestion(submitted_password, confirmed_submitted_password, e)
     })
 }
+
+/*Fin gestion mot de passe*/
+
 
 /*Fin config formulaire d'inscription*/
 
