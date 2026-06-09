@@ -24,3 +24,28 @@ def supprimer_proposal(request,pk):
         proposal.delete()
         return redirect('liste_proposals')
     return render(request,'offres_demandes/supprimer.html',{'proposal':proposal})
+def rechercher_proposals(request):
+    matiere = request.GET.get('matiere', '')
+    type_proposal = request.GET.get('type', '')
+    proposals = Proposal.objects.all()
+    if matiere:
+        proposals = proposals.filter(matiere__icontains=matiere)
+    if type_proposal:
+        proposals = proposals.filter(type=type_proposal)
+    return render(request, 'offres_demandes/liste.html', {'proposals': proposals})
+
+def repondre_proposal(request, pk):
+    proposal = get_object_or_404(Proposal, pk=pk)
+    if request.method == 'POST':
+        reponse = Proposal.objects.create(
+            auteur=request.user,
+            type='DEMANDE' if proposal.type == 'OFFRE' else 'OFFRE',
+            matiere=proposal.matiere,
+            description=request.POST.get('description', ''),
+            disponibilite_debut=proposal.disponibilite_debut,
+            disponibilite_fin=proposal.disponibilite_fin,
+            modalite=proposal.modalite,
+            statut='OUVERTE'
+        )
+        return redirect('liste_proposals')
+    return render(request, 'offres_demandes/repondre.html', {'proposal': proposal})
