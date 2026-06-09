@@ -1,137 +1,252 @@
-
 /* =========================================================
    profil.css  –  Page Profil IFRI MentorLink
-   Palette : bleu #1a4a8a  marron #6b3a1f  orange #e07b39
+   Même palette que chat.css : bleu #1a4a8a / marron #6b3a1f / orange #e07b39
    ========================================================= */
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 :root {
-  --bleu:    #1a4a8a;
-  --bleu2:   #153d75;
-  --marron:  #6b3a1f;
-  --orange:  #e07b39;
+  --bleu: rgb(37, 101, 168);
+  --bleu2: #1a4a8a;
+  --bleu_pale: #9dc7e5;
+  --marron: #6b3a1f;
+  --orange: #e07b39;
   --orange2: #c96a2b;
 
-  --gris-bg:  #f3f4f6;
+  --gris-bg: #ffffff;
   --gris-brd: #dde1e8;
   --gris-txt: #8a93a6;
-  --blanc:    #ffffff;
-  --texte:    #1c2333;
+  --blanc: #ffffff;
+  --texte: #1c2333;
 
-  --shadow: 0 4px 16px rgba(0,0,0,.09);
+  --shadow: 0 2px 8px rgba(0, 0, 0, .08);
 }
 
 body {
   font-family: 'Segoe UI', Tahoma, sans-serif;
   background: var(--gris-bg);
   color: var(--texte);
-  min-height: 100vh;
-  padding: 32px 16px;
-}
-
-/* ── PAGE CENTREE ── */
-.page {
-  max-width: 680px;
-  margin: 0 auto;
-}
-
-/* ── CARTE PRINCIPALE ── */
-.carte-profil {
-  background: var(--blanc);
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--gris-brd);
+  height: 100vh;
   overflow: hidden;
 }
 
-/* ── EN-TÊTE ── */
-.entete {
-  background: var(--bleu);
-  padding: 32px 28px 28px;
+/* ── LAYOUT : même structure que .page-messagerie ── */
+.page {
   display: flex;
-  align-items: center;
-  gap: 20px;
+  height: 100vh;
+  max-width: 1080px;
+  margin: 0 auto;
 }
 
-.avatar {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: var(--orange);
-  color: var(--blanc);
-  font-size: 22px;
-  font-weight: 700;
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  border: 3px solid rgba(255,255,255,.3);
-  letter-spacing: .5px;
+/* ─────────────────────────────────────
+   SIDEBAR  (copie exacte de chat.css)
+   ───────────────────────────────────── */
+.sidebar {
+  width: 290px;
+  min-width: 290px;
+  background: var(--blanc);
+  border-right: 1px solid var(--gris-brd);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.entete-info h1 {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--blanc);
-}
-
-.badge-filiere {
-  display: inline-block;
-  margin-top: 6px;
-  background: rgba(255,255,255,.18);
-  color: rgba(255,255,255,.9);
-  font-size: 12.5px;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,.25);
-}
-
-/* ── SECTIONS ── */
-.section {
-  padding: 22px 28px;
+.sidebar-top {
+  padding: 16px 16px 12px;
   border-bottom: 1px solid var(--gris-brd);
 }
 
-.section:last-of-type { border-bottom: none; }
-
-.section-titre {
+/* bouton retour — copie exacte de chat.css */
+.btn-retour {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
   font-size: 13px;
+  font-weight: 600;
+  background: var(--bleu);
+  color: var(--blanc);
+  padding: 5px 12px 5px 8px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  transition: background .15s, color .15s;
+}
+
+.sidebar-top h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--texte);
+}
+
+/* mini résumé dans la sidebar */
+.sidebar-resume {
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--gris-brd);
+}
+
+.av {
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  color: var(--blanc);
+  flex-shrink: 0;
+}
+
+.av-grand {
+  width: 68px;
+  height: 68px;
+  font-size: 22px;
+  background: var(--bleu);
+  border: 3px solid var(--bleu_pale);
+}
+
+.side-nom {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--texte);
+  text-align: center;
+}
+
+.badge-filiere {
+  background: var(--bleu);
+  color: var(--blanc);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--bleu_pale);
+}
+
+/* ─────────────────────────────────────
+   ZONE CONTENU PRINCIPAL
+   ───────────────────────────────────── */
+.contenu {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--gris-bg);
+}
+
+.contenu::-webkit-scrollbar {
+  width: 4px;
+}
+
+.contenu::-webkit-scrollbar-thumb {
+  background: var(--gris-brd);
+  border-radius: 4px;
+}
+
+/* ── CARTE (même esprit que chat-header) ── */
+.carte {
+  background: var(--blanc);
+  border-radius: 12px;
+  border: 1px solid var(--gris-brd);
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.carte-titre {
+  font-size: 12.5px;
   font-weight: 700;
   color: var(--bleu);
   text-transform: uppercase;
   letter-spacing: .6px;
-  margin-bottom: 14px;
   display: flex;
   align-items: center;
   gap: 7px;
 }
 
-/* grille infos de contact */
-.grille-infos {
+/* ── GRILLE 2 colonnes pour les infos ── */
+.grille {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 16px;
 }
 
-.info-bloc {
+/* champ en mode lecture */
+.champ-view {
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
 
-.info-label {
-  font-size: 11.5px;
+.champ-label {
+  font-size: 11px;
+  font-weight: 700;
   color: var(--gris-txt);
-  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: .4px;
 }
 
-.info-val {
+.champ-ligne {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.champ-val {
   font-size: 14px;
-  color: var(--texte);
   font-weight: 600;
+  color: var(--texte);
+}
+
+/* ── BOUTON STYLET ── */
+.btn-stylet {
+  background: none;
+  border: 1px solid var(--gris-brd);
+  border-radius: 5px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--gris-txt);
+  flex-shrink: 0;
+  transition: all .15s;
+}
+
+.btn-stylet:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+  background: #fdf0e6;
+}
+
+/* champ de saisie inline */
+.champ-input {
+  border: 1.5px solid var(--bleu);
+  border-radius: 7px;
+  padding: 6px 10px;
+  font-family: inherit;
+  font-size: 13.5px;
+  color: var(--texte);
+  outline: none;
+  width: 100%;
+  background: #eff6ff;
+  transition: border-color .2s;
+}
+
+.champ-input:focus {
+  border-color: var(--orange);
+}
+
+/* cacher / montrer */
+.cache {
+  display: none !important;
 }
 
 /* ── TAGS ── */
@@ -144,98 +259,105 @@ body {
 .tag {
   font-size: 12.5px;
   font-weight: 600;
-  padding: 5px 13px;
+  padding: 5px 12px;
   border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
-/* compétences : fond bleu clair */
 .tag-comp {
-  background: #e8f0fb;
-  color: var(--bleu);
-  border: 1px solid #c5d5f0;
+  background: var(--bleu);
+  color: var(--blanc);
+  border: 1px solid var(--bleu_pale);
 }
 
-/* lacunes : fond orange clair */
 .tag-lacune {
   background: #fdf0e6;
   color: var(--marron);
   border: 1px solid #f0d0b0;
 }
 
-/* ── BOUTONS D'ACTION ── */
-.actions {
-  padding: 20px 28px;
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  border-top: 1px solid var(--gris-brd);
+/* bouton × pour supprimer un tag */
+.tag-x {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  color: inherit;
+  opacity: .6;
+  padding: 0;
+  transition: opacity .15s;
 }
 
-.btn-modifier, .btn-mdp {
-  display: flex;
+.tag-x:hover {
+  opacity: 1;
+}
+
+/* zone d'ajout de tag */
+.tag-ajouter {
+  margin-top: 4px;
+}
+
+/* bouton mot de passe — même style que btn-mdp dans chat */
+.btn-mdp {
+  display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 9px 20px;
+  gap: 8px;
+  background: var(--blanc);
+  color: var(--orange);
+  border: 1.5px solid var(--orange);
   border-radius: 8px;
+  padding: 9px 18px;
   font-family: inherit;
   font-size: 13.5px;
   font-weight: 600;
   cursor: pointer;
   transition: all .15s;
-  border: none;
+  align-self: flex-start;
 }
 
-/* bouton modifier profil : bleu */
-.btn-modifier {
-  background: var(--bleu);
-  color: var(--blanc);
+.btn-mdp:hover {
+  background: #fdf0e6;
 }
-.btn-modifier:hover { background: var(--bleu2); }
 
-/* bouton mot de passe : contour orange */
-.btn-mdp {
-  background: var(--blanc);
-  color: var(--orange);
-  border: 1.5px solid var(--orange);
-}
-.btn-mdp:hover { background: #fdf0e6; }
-
-/* =========================================================
-   OVERLAY + MODALS
-   ========================================================= */
+/* ─────────────────────────────────────
+   OVERLAY + MODAL (copie de chat.css)
+   ───────────────────────────────────── */
 .overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.45);
+  background: rgba(0, 0, 0, .45);
   z-index: 100;
 }
 
-.overlay.visible { display: block; }
+.overlay.visible {
+  display: block;
+}
 
 .modal {
   display: none;
   position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%) scale(.97);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 92%;
-  max-width: 540px;
+  max-width: 480px;
   background: var(--blanc);
   border-radius: 14px;
-  box-shadow: 0 8px 32px rgba(0,0,0,.18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, .18);
   z-index: 101;
-  transition: transform .15s;
-  max-height: 90vh;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .modal.visible {
   display: block;
-  transform: translate(-50%, -50%) scale(1);
 }
 
 .modal-header {
-  padding: 18px 22px 14px;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--gris-brd);
   display: flex;
   align-items: center;
@@ -243,9 +365,8 @@ body {
 }
 
 .modal-header h3 {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
-  color: var(--texte);
 }
 
 .modal-fermer {
@@ -257,43 +378,33 @@ body {
   border-radius: 6px;
   transition: color .15s;
 }
-.modal-fermer:hover { color: var(--marron); }
+
+.modal-fermer:hover {
+  color: var(--marron);
+}
 
 .modal-body {
-  padding: 18px 22px;
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-.modal-footer {
-  padding: 14px 22px 18px;
-  border-top: 1px solid var(--gris-brd);
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-/* champs du formulaire */
-.champ-groupe { display: flex; gap: 12px; }
-.champ-groupe.deux-col > .champ { flex: 1; }
-
-.champ {
+.champ-form {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
-.champ label {
-  font-size: 12px;
+.champ-form label {
+  font-size: 11.5px;
   font-weight: 700;
   color: var(--gris-txt);
   text-transform: uppercase;
   letter-spacing: .4px;
 }
 
-.champ input,
-.champ select {
+.champ-form input {
   border: 1.5px solid var(--gris-brd);
   border-radius: 8px;
   padding: 8px 11px;
@@ -302,61 +413,25 @@ body {
   color: var(--texte);
   outline: none;
   transition: border-color .2s;
-  background: var(--blanc);
 }
 
-.champ input:focus,
-.champ select:focus { border-color: var(--bleu); }
+.champ-form input:focus {
+  border-color: var(--bleu);
+}
 
-/* zone de tags avec input intégré */
-.tag-input-zone {
-  border: 1.5px solid var(--gris-brd);
-  border-radius: 8px;
-  padding: 7px 10px;
+.modal-footer {
+  padding: 14px 20px;
+  border-top: 1px solid var(--gris-brd);
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  cursor: text;
-  transition: border-color .2s;
-  min-height: 42px;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
-.tag-input-zone:focus-within { border-color: var(--bleu); }
-
-.tag-input-zone .tag {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.tag-input-zone .tag button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: inherit;
-  font-size: 13px;
-  line-height: 1;
-  opacity: .7;
-  padding: 0;
-}
-.tag-input-zone .tag button:hover { opacity: 1; }
-
-.tag-input {
-  border: none !important;
-  outline: none !important;
-  padding: 2px 4px !important;
-  font-size: 13px !important;
-  flex: 1;
-  min-width: 120px;
-  background: transparent !important;
-}
-
-/* boutons du modal */
 .btn-annuler {
   background: none;
   border: 1.5px solid var(--gris-brd);
   border-radius: 8px;
-  padding: 8px 18px;
+  padding: 8px 16px;
   font-family: inherit;
   font-size: 13.5px;
   font-weight: 600;
@@ -364,13 +439,17 @@ body {
   cursor: pointer;
   transition: all .15s;
 }
-.btn-annuler:hover { border-color: var(--marron); color: var(--marron); }
+
+.btn-annuler:hover {
+  border-color: var(--marron);
+  color: var(--marron);
+}
 
 .btn-sauver {
   background: var(--bleu);
   border: none;
   border-radius: 8px;
-  padding: 8px 22px;
+  padding: 8px 20px;
   font-family: inherit;
   font-size: 13.5px;
   font-weight: 600;
@@ -378,9 +457,11 @@ body {
   cursor: pointer;
   transition: background .15s;
 }
-.btn-sauver:hover { background: var(--bleu2); }
 
-/* message d'erreur */
+.btn-sauver:hover {
+  background: var(--bleu2);
+}
+
 .msg-erreur {
   font-size: 13px;
   color: #c0392b;
@@ -391,10 +472,33 @@ body {
   border-left: 3px solid #c0392b;
 }
 
-/* responsive */
-@media (max-width: 500px) {
-  .grille-infos        { grid-template-columns: 1fr; }
-  .champ-groupe.deux-col { flex-direction: column; }
-  .entete { padding: 22px 18px; }
-  .section, .actions { padding-left: 18px; padding-right: 18px; }
+/* ── LISTE CHECKBOXES (compétences / lacunes) ── */
+.liste-checkbox {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px 12px;
+  border: 1.5px solid var(--bleu);
+  border-radius: 8px;
+  background: #eff6ff;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--texte);
+  cursor: pointer;
+}
+
+.checkbox-item input[type="checkbox"] {
+  accent-color: var(--bleu);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
 }
