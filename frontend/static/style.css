@@ -13,6 +13,7 @@ body{
 }
 
 :root{
+    --bleu_pale: #9dc7e5;
     --bleu: #163fa0;
     --orange: #f59528;
     --marron: #6F4E37;
@@ -74,6 +75,21 @@ body{
 }
 
 .blue-button:hover{
+    box-shadow: var(--blue_shadow);
+    transform: translateY(-2px);
+}
+
+.pale-blue-button{
+    height: var(--height_buttons);
+    min-width: var(--min_width_buttons);
+    border-style: none;
+    border-radius: var(--radius_buttons);
+    background-color: var(--bleu_pale);
+    transition: 0.1s ease;
+    color: white;
+}
+
+.pale-blue-button:hover{
     box-shadow: var(--blue_shadow);
     transform: translateY(-2px);
 }
@@ -144,7 +160,7 @@ page-header{
     align-items: center;
     flex-direction: row;
     border-radius: var(--radius_buttons);
-    background-color: var(--orange);
+    background-color: var(--bleu_pale);
     height: var(--height_buttons);
     min-width: var(--min_width_buttons);
     margin-right: 20px;
@@ -246,7 +262,7 @@ page-block{
     flex-direction: column;
     width: 40%;
     border-radius: var(--radius_buttons);
-    background-color: rgb(250, 182, 55);
+    background-color: var(--bleu_pale);
     box-shadow: var(--grey_shadow);
     animation: reverse-vertical-apparition 1s ease;
 }
@@ -264,15 +280,25 @@ page-block{
     gap: 10px;
 }
 
+.inscription-block label{
+    color: rgb(37, 101, 168);
+}
+
+.inscription-block fieldset{
+    color: rgb(37, 101, 168);
+}
+
 .inscription-block form > input{
     padding: 2px;
     width: 60%;
+    height: 20px;
     outline: none;
 }
 
 #password-submission input{
     padding: 2px;
     width: 60%;
+    height: 20px;
     outline: none;
 }
 
