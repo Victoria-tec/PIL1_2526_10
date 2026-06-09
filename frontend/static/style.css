@@ -269,8 +269,8 @@ page-block{
 
 .inscription-block .stick{
     background-color: var(--bleu);
-    align-self: center;
-    animation: horizontal-apparition 1s ease;
+    align-items: center;
+    gap: 0;
 }
 
 .inscription-block form{
@@ -281,10 +281,6 @@ page-block{
 }
 
 .inscription-block label{
-    color: rgb(37, 101, 168);
-}
-
-.inscription-block fieldset{
     color: rgb(37, 101, 168);
 }
 
@@ -309,9 +305,14 @@ fieldset{
     border-style: solid;
     border-color: black;
     border-width: 1px;
+    color: rgb(37, 101, 168);
 }
 
-.sexe-choice-section{
+input[type="radio"]{
+    accent-color: grey;
+}
+
+.choice-section{
     display: flex;
     align-items: left;
 }
@@ -669,4 +670,14 @@ circle{
     stroke-width: 15;
     stroke-dasharray: 262;
     stroke-dashoffset: 0;
+}
+
+#creation-block > *{
+    margin-bottom: 0;
+}
+
+#creation-block textarea{
+    resize: none;
+    width: 80%;
+    align-self: left;
 }
