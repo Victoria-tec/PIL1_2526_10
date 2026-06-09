@@ -32,9 +32,16 @@ class ConnexionForm(forms.Form):
         widget=forms.PasswordInput,
         label="Mot de passe"
     )
-class ReinitialisationMotDePasseForm(forms.Form):
+class EmailReinitialisationForm(forms.Form):
+    # Étape 1 — L'utilisateur entre son email
     email = forms.EmailField(
         label="Votre adresse email"
+    )
+
+class ReinitialisationMotDePasseForm(forms.Form):
+    # Étape 2 — L'utilisateur entre le code + nouveau mot de passe
+    code = forms.IntegerField(
+        label="Code reçu dans votre messagerie"
     )
     nouveau_mot_de_passe = forms.CharField(
         widget=forms.PasswordInput,
