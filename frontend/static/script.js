@@ -222,39 +222,49 @@ let modify_pwd_form = document.getElementById("modify-password-form")
 
 if(modify_pwd_form){
     let step = 1
-    modify_pwd_form.addEventListener("submit", (e) =>{
+
+    const handleSubmit = (e) => {
         e.preventDefault()
 
         if(step === 1){
-            document.querySelector("h1").textContent = "Entrez le code à 4 chiffres reçu"
+            step = 2
+            document.querySelector("h2").textContent = "Entrez le code reçu"
             document.getElementById("mail").type = "text"
             document.getElementById("mail").placeholder = "1234"
             document.getElementById("mail").value = ""
             modify_pwd_form.querySelector("label").textContent = ""
             modify_pwd_form.querySelector("button").textContent = "Soumettre"
 
-            modify_pwd_form.querySelector("button").addEventListener("click", () =>{
-                step += 1
-            })
-        }else{
-            document.querySelector("h1").textContent = "MODIFIER MOT DE PASSE"
+        } else if(step === 2){
+            step = 3
+            document.querySelector("h2").textContent = "Modifier le mot de passe"
             modify_pwd_form.innerHTML = `
-                    <div id="password-submission">
-                        <label for="pwd">Nouveau mot de passe</label>
-                        <input type="password" id="pwd" name="mot_de_passe" required>
+                <div id="password-submission">
+                    <label for="pwd">Nouveau mot de passe</label>
+                    <input type="password" id="pwd" name="mot_de_passe" required>
 
-                        <label for="confirm-pwd">Confirmez votre nouveau mot de passe</label>
-                        <input type="password" id="confirm-pwd" name="confirmation_mot_de_passe" required>
-                    </div>
-
-                    <button class="blue-button" id="new-password-submission">Soumettre</button>
+                    <label for="confirm-pwd">Confirmez votre nouveau mot de passe</label>
+                    <input type="password" id="confirm-pwd" name="confirmation_mot_de_passe" required>
+                </div>
+                <p class="pwd-different" id="pwd-error" style="display:none;">Les mots de passe ne correspondent pas</p>
+                <button class="blue-button">Soumettre</button>
             `
-            document.getElementById("modify-password-form").addEventListener("submit", (e) => {
-                e.preventDefault()
-                window.location.href = "../hub.html"
-            })
+
+        } else if(step === 3){
+            const pwd = document.getElementById("pwd").value
+            const confirmedPwd = document.getElementById("confirm-pwd").value
+            const errorMsg = document.getElementById("pwd-error")
+
+            if(pwd !== confirmedPwd){
+                errorMsg.style.display = "block"
+                return
+            }
+
+            window.location.href = "../hub.html"
         }
-    })
+    }
+
+    modify_pwd_form.addEventListener("submit", handleSubmit)
 }
 
 /*Main Page*/

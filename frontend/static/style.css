@@ -362,6 +362,17 @@ select{
     width: 90%;
 }
 
+#email-sent-block{
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#email-sent-block *{
+    margin-top: 0;
+}
+
 hr{
     margin-top: 0;
     margin-bottom: 0;
