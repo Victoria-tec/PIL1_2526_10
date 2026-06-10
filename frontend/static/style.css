@@ -148,7 +148,8 @@ page-header{
 .logo img{
     width: 125px;
     height: 100px;
-    margin-left: 5px;
+    margin-top: 10px;
+    margin-left: 10px
 }
 
 .header-buttons{
