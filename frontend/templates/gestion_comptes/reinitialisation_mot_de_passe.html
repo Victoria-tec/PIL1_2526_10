@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="{% static 'script.js' %}" type="module"></script>
+    <title>Réinitialisation du mot de passe</title>
+</head>
+<body>
+    <div class="inscription-block">
+        <div style="align-self: center; display: flex; flex-direction: column; align-items: center; color: var(--bleu);">
+            <h2>Réinitialisation du mot de passe</h2>
+            <div class="stick"></div>
+        </div>
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align: center;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        {% if etape == 1 or not etape %}
+        <form method="POST" action="{% url 'reinitialisation_mot_de_passe' %}">
+            {% csrf_token %}
+            <label for="email">Veuillez entrer votre adresse email</label>
+            <input type="email" id="email" name="email" placeholder="monemail@gmail.com" required>
+
+            <button class="blue-button" style="width: 30%;">Envoyer le code</button>
+        </form>
+        {% elif etape == 2 %}
+        <form method="POST" action="{% url 'reinitialisation_mot_de_passe' %}">
+            {% csrf_token %}
+            <label for="code">Code reçu par email</label>
+            <input type="text" id="code" name="code" placeholder="1234" required>
+
+            <label for="nouveau_mot_de_passe">Nouveau mot de passe</label>
+            <input type="password" id="nouveau_mot_de_passe" name="nouveau_mot_de_passe" required>
+
+            <label for="confirmation_nouveau_mot_de_passe">Confirmer le nouveau mot de passe</label>
+            <input type="password" id="confirmation_nouveau_mot_de_passe" name="confirmation_nouveau_mot_de_passe" required>
+
+            <button class="blue-button" style="width: 30%;">Réinitialiser</button>
+        </form>
+        {% endif %}
+    </div>
+</body>
+</html>

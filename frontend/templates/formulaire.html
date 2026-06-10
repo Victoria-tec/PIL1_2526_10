@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="{% static 'script.js' %}" type="module"></script>
+    <title>Publier une offre ou une demande</title>
+</head>
+
+<body>
+
+    <div class="inscription-block" id="creation-block">
+
+        <h1 style="align-self: center;">Publier une offre ou une demande</h1>
+
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align: center;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" action="{% url 'creer_proposal' %}" id="formulaire-offre-demande">
+            {% csrf_token %}
+
+            <fieldset>
+                <legend>Type de publication</legend>
+
+                <div class="choice-section">
+                    <label for="type-offre">Offre de mentorat</label>
+                    <input type="radio" name="type" id="type-offre" value="OFFRE" style="margin-left: 38px;" required>
+                </div>
+
+                <div class="choice-section">
+                    <label for="type-demande">Demande de mentorat</label>
+                    <input type="radio" name="type" id="type-demande" value="DEMANDE" required>
+                </div>
+
+            </fieldset>
+
+            <label for="matiere">Sujet</label>
+            <select name="matiere" id="matiere" required>
+                <option value="">Choisissez une matière</option>
+                <option value="Algorithmique">Algorithmique</option>
+                <option value="Analyse">Analyse</option>
+                <option value="Théorie des graphes">Théorie des graphes</option>
+                <option value="Python">Python</option>
+                <option value="Anglais technique">Anglais technique</option>
+                <option value="Développement web">Développement web</option>
+                <option value="Langage C">Langage C</option>
+                <option value="Base de données">Base de données</option>
+                <option value="Réseaux">Réseaux</option>
+                <option value="Mathématiques">Mathématiques</option>
+            </select>
+
+            <label for="description">Description</label>
+            <textarea name="description" id="description" rows="5" maxlength="1000" placeholder="Expliquez précisement vos objectifs, vos attentes et/ou vos compétences..."></textarea>
+
+            <label for="disponibilite_debut">Date de début</label>
+            <input type="datetime-local" name="disponibilite_debut" id="disponibilite_debut" required>
+
+            <label for="disponibilite_fin">Date de fin</label>
+            <input type="datetime-local" name="disponibilite_fin" id="disponibilite_fin" required>
+
+            <fieldset>
+                <legend>Modalité</legend>
+
+                <label for="modalite-presentiel">Présentiel</label>
+                <input type="radio" name="modalite" id="modalite-presentiel" value="PRESENTIEL" required>
+
+                <label for="modalite-distanciel">Distanciel</label>
+                <input type="radio" name="modalite" id="modalite-distanciel" value="EN_LIGNE" required>
+
+                <label for="modalite-hybride">Hybride</label>
+                <input type="radio" name="modalite" id="modalite-hybride" value="LES_DEUX" required>
+            </fieldset>
+
+            <button type="submit" class="blue-button" id="creation-publication-button">Publier</button>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path("", views.liste_proposals, name="liste_proposals"),
+    path("creer/", views.creer_proposal, name="creer_proposal"),
+    path("<int:pk>/", views.detail_proposal, name="detail_proposal"),
+    path("<int:pk>/supprimer/", views.supprimer_proposal, name="supprimer_proposal"),
+]

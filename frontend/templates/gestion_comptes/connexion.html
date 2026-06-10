@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="{% static 'script.js' %}" type="module"></script>
+    <title>Connexion</title>
+</head>
+<body>
+    <div class="inscription-block">
+        <div style="align-self: center; display: flex; flex-direction: column; align-items: center; color: var(--bleu);">
+            <h1>Connexion</h1>
+            <div class="stick"></div>
+        </div>
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align: center;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        <form method="POST" action="{% url 'connexion' %}">
+            {% csrf_token %}
+            <label for="identifiant">Votre adresse email</label>
+            <input type="text" id="identifiant" name="identifiant" placeholder="monemail@gmail.com" required>
+
+            <label for="mot_de_passe">Mot de passe</label>
+            <input type="password" id="mot_de_passe" name="mot_de_passe" required>
+            <a href="{% url 'reinitialisation_mot_de_passe' %}"><h5 style="margin-top: 0; margin-bottom: 0; font-weight: 200; font-style: italic;">Mot de passe oublié</h5></a>
+
+            <button class="blue-button">Se connecter</button>
+        </form>
+        <p style="text-align: center; margin-top: 15px;">
+            Pas encore inscrit ? <a href="{% url 'inscription' %}">Créer un compte</a>
+        </p>
+    </div>
+</body>
+</html>

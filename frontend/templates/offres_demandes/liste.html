@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Propositions – IFRI MentorLink</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="inscription-block">
+        <h1>Toutes les propositions</h1>
+        <a href="{% url 'creer_proposal' %}"><button class="blue-button">+ Nouvelle proposition</button></a>
+        <div style="margin-top:20px;">
+        {% for proposal in proposals %}
+            <div style="border:1px solid #ddd;padding:15px;margin-bottom:10px;border-radius:8px;">
+                <h3>{{ proposal.get_type_display }} – {{ proposal.matiere }}</h3>
+                <p>{{ proposal.description|truncatechars:100 }}</p>
+                <p><strong>Auteur :</strong> {{ proposal.auteur.get_full_name }}</p>
+                <p><strong>Statut :</strong> {{ proposal.get_statut_display }}</p>
+                <a href="{% url 'detail_proposal' proposal.id %}">Voir plus</a>
+            </div>
+        {% empty %}
+            <p>Aucune proposition pour le moment.</p>
+        {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
