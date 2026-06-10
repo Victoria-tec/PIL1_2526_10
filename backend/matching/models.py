@@ -17,3 +17,4 @@ class Matching(models.Model):
 
     def __str__(self):
         return f"Match {self.user1.prenom} ↔ {self.user2.prenom} : {self.score} points"
+    
