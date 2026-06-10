@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="../static/script.js" type="module"></script>
+    <title>IFRI MentorLink</title>
+</head>
+<body>
+    <header>
+        <div><img class="logo" src="../static/images/logo.png" alt="logo"></div>
+        <hr>
+    </header>
+    <div class="match-results">
+        <div class="filtrage">
+            <h2>Options de filtrage :</h2>
+            <select name="sexe" id="filtrage-sexe">
+                <option value="homme">Homme</option>
+                <option value="femme">Femme</option>
+            </select>
+            <select name="niveau" id="filtrage-niveau">
+                <option value="L1">L1</option>
+                <option value="L2">L2</option>
+                <option value="L3">L3</option>
+                <option value="M1">M1</option>
+                <option value="M2">M2</option>
+            </select>
+            <select name="filiere" id="filtrage-filiere">
+                <option value="GL">GL</option>
+                <option value="IA">IA</option>
+                <option value="IoT">IoT</option>
+                <option value="SI">SI</option>
+                <option value="IM">IM</option>
+            </select>
+            <button class="blue-button" id="filter" style="background-color: var(--bleu);">Filtrer</button>
+        </div>
+        <h1>Veuillez choisir un mentor</h1>
+        <button id="cancel-match">Annuler le processus</button>
+        <div class="matchs-list">
+            <match-proposition nom="TOSSAVI" prenom="Claude" niveau="M1" score="95"></match-proposition>
+            <match-proposition nom="TOSSAVI" prenom="Claude" niveau="M1" score="75"></match-proposition>
+            <match-proposition nom="TOSSAVI" prenom="Claude" niveau="M1" score="50"></match-proposition>
+            <match-proposition nom="TOSSAVI" prenom="Claude" niveau="M1" score="20"></match-proposition>
+            <match-proposition nom="TOSSAVI" prenom="Claude" niveau="M1" score="5"></match-proposition>
+        </div>
+    </div>
+</body>
+</html>

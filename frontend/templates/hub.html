@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="../static/script.js" type="module"></script>
+    <title>IFRI MentorLink</title>
+</head>
+<body style="background-color: #eff6ff;">
+    <div class="body-with-side-bar">
+        <side-bar user-name="DJIDONOU Paul"></side-bar>
+        <div class="body-without-side-bar">
+            <div class="welcome-message">
+                <h1 style="font-size: 70px; animation: reverse-vertical-apparition 0.5s ease;">Bon retour Paul !</h1>
+                <h1 style="font-style: italic; animation: horizontal-apparition 0.3s ease forwards; animation-delay: 0.4s; opacity: 0;">On reprend le boulot ?</h1>
+                <div class="add-buttons">
+                    <button class="blue-button" id="creation-button">+ Créer</button>
+                </div>
+            </div>
+            <div style="margin-top: 0; display: flex; flex-direction: column; align-items: center; align-self: center; color: black; animation: reverse-vertical-apparition 0.8s ease;">
+                <h1>VOTRE ACTIVITÉ</h1>
+                <div class="stick" style="background-color: black;"></div>
+            </div>
+            <div class="category">
+            <h3>Matchs en cours</h3>
+            <div class="stick"></div>
+            <div class="category-blocks-box" id="en-cours">
+                <match-block student-nom="DJIDONOU" student-prenom="Marie-Véronique" mentor-nom="HOUENOU" mentor-prenom="Hughes" topic="Analyse" compatibility-score="70" status="validated"></match-block>
+                <match-block student-nom="DJIDONOU" student-prenom="Marie-Véronique" mentor-nom="HOUENOU" mentor-prenom="Hughes" topic="Analyse" compatibility-score="70" status="validated"></match-block>
+                <match-block student-nom="DJIDONOU" student-prenom="Marie-Véronique" mentor-nom="HOUENOU" mentor-prenom="Hughes" topic="Analyse" compatibility-score="70" status="validated"></match-block>
+            </div>
+        </div>
+        <div class="category">
+            <h3>En attente de votre validation</h3>
+            <div class="stick"></div>
+            <div class="category-blocks-box" id="attente-validation">
+                <match-block student-nom="DJIDONOU" student-prenom="Paul" mentor-nom="HOUENOU" mentor-prenom="Hughes" topic="Algorithmique" compatibility-score="70" status="to-validate"></match-block>
+            </div>
+        </div>
+        <div class="category">
+            <h3>En attente de réponse</h3>
+            <div class="stick"></div>
+            <div class="category-blocks-box" id="attente-reponse">
+                <match-block student-nom="DJIDONOU" student-prenom="Paul" mentor-nom="HOUENOU" mentor-prenom="Hughes" topic="Algorithmique" compatibility-score="70" status="waiting-for-validation"></match-block>
+                <match-block student-nom="DJIDONOU" student-prenom="Paul" mentor-nom="HOUENOU" mentor-prenom="Hughes" topic="Algorithmique" compatibility-score="70" status="waiting-for-validation"></match-block>
+            </div>
+        </div>
+        </div>
+    </div>
+    <page-footer></page-footer>
+</body>
+</html>

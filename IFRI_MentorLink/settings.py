@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'messagerie',
     'annonces',
     'backend.messagerie',
+    'backend.matching',
 ]
 
 
@@ -61,7 +62,7 @@ ROOT_URLCONF = 'IFRI_MentorLink.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'frontend' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -129,6 +130,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / 'frontend' / 'static',
+]
+
 ASGI_APPLICATION = 'IFRI_MentorLink.asgi.application'
 
 CHANNEL_LAYERS = {
@@ -141,4 +146,3 @@ CHANNEL_LAYERS = {
 }
 
 AUTH_USER_MODEL = 'gestion_comptes.User'
-

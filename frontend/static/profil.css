@@ -1,0 +1,542 @@
+/* =========================================================
+   profil.css  –  Page Profil IFRI MentorLink
+   Même palette que chat.css : bleu #1a4a8a / marron #6b3a1f / orange #e07b39
+   ========================================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bleu: rgb(37, 101, 168);
+  --bleu2: #1a4a8a;
+  --bleu_pale: #9dc7e5;
+  --marron: #6b3a1f;
+  --orange: #e07b39;
+  --orange2: #c96a2b;
+
+  --gris-bg: #ffffff;
+  --gris-brd: #dde1e8;
+  --gris-txt: #8a93a6;
+  --blanc: #ffffff;
+  --texte: #1c2333;
+
+  --shadow: 0 2px 8px rgba(0, 0, 0, .08);
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background: var(--gris-bg);
+  color: var(--texte);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── LAYOUT : même structure que .page-messagerie ── */
+.page {
+  display: flex;
+  height: 100vh;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+/* ─────────────────────────────────────
+   SIDEBAR  (copie exacte de chat.css)
+   ───────────────────────────────────── */
+.sidebar {
+  width: 290px;
+  min-width: 290px;
+  background: var(--blanc);
+  border-right: 1px solid var(--gris-brd);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-top {
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid var(--gris-brd);
+}
+
+/* bouton retour — copie exacte de chat.css */
+.btn-retour {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--bleu);
+  color: var(--blanc);
+  padding: 5px 12px 5px 8px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  transition: background .15s, color .15s;
+}
+
+.sidebar-top h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--texte);
+}
+
+/* mini résumé dans la sidebar */
+.sidebar-resume {
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--gris-brd);
+}
+
+.av {
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  color: var(--blanc);
+  flex-shrink: 0;
+}
+
+.av-grand {
+  width: 68px;
+  height: 68px;
+  font-size: 22px;
+  background: var(--bleu);
+  border: 3px solid var(--bleu_pale);
+}
+
+.side-nom {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--texte);
+  text-align: center;
+}
+
+.badge-filiere {
+  background: var(--bleu);
+  color: var(--blanc);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--bleu_pale);
+}
+
+/* ─────────────────────────────────────
+   ZONE CONTENU PRINCIPAL
+   ───────────────────────────────────── */
+.contenu {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--gris-bg);
+}
+
+.contenu::-webkit-scrollbar {
+  width: 4px;
+}
+
+.contenu::-webkit-scrollbar-thumb {
+  background: var(--gris-brd);
+  border-radius: 4px;
+}
+
+/* ── CARTE (même esprit que chat-header) ── */
+.carte {
+  background: var(--blanc);
+  border-radius: 12px;
+  border: 1px solid var(--gris-brd);
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.carte-titre {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--bleu);
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* ── GRILLE 2 colonnes pour les infos ── */
+.grille {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* champ en mode lecture */
+.champ-view {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.champ-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gris-txt);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.champ-ligne {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.champ-val {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--texte);
+}
+
+/* ── BOUTON STYLET ── */
+.btn-stylet {
+  background: none;
+  border: 1px solid var(--gris-brd);
+  border-radius: 5px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--gris-txt);
+  flex-shrink: 0;
+  transition: all .15s;
+}
+
+.btn-stylet:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+  background: #fdf0e6;
+}
+
+/* champ de saisie inline */
+.champ-input {
+  border: 1.5px solid var(--bleu);
+  border-radius: 7px;
+  padding: 6px 10px;
+  font-family: inherit;
+  font-size: 13.5px;
+  color: var(--texte);
+  outline: none;
+  width: 100%;
+  background: #eff6ff;
+  transition: border-color .2s;
+}
+
+.champ-input:focus {
+  border-color: var(--orange);
+}
+
+/* cacher / montrer */
+.cache {
+  display: none !important;
+}
+
+/* ── TAGS ── */
+.tags-zone {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tag-comp {
+  background: var(--bleu);
+  color: var(--blanc);
+  border: 1px solid var(--bleu_pale);
+}
+
+.tag-lacune {
+  background: var(--orange);
+  color: var(--blanc);
+  border: 1px solid var(--orange2);
+}
+
+/* bouton × pour supprimer un tag */
+.tag-x {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  color: inherit;
+  opacity: .6;
+  padding: 0;
+  transition: opacity .15s;
+}
+
+.tag-x:hover {
+  opacity: 1;
+}
+
+/* zone d'ajout de tag */
+.tag-ajouter {
+  margin-top: 4px;
+}
+
+/* bouton mot de passe — même style que btn-mdp dans chat */
+.btn-mdp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--blanc);
+  color: var(--orange);
+  border: 1.5px solid var(--orange);
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  align-self: flex-start;
+}
+
+/* ─────────────────────────────────────
+   OVERLAY + MODAL (copie de chat.css)
+   ───────────────────────────────────── */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .45);
+  z-index: 100;
+}
+
+.overlay.visible {
+  display: block;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 92%;
+  max-width: 480px;
+  background: var(--blanc);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, .18);
+  z-index: 101;
+  overflow: hidden;
+}
+
+.modal.visible {
+  display: block;
+}
+
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--gris-brd);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-header h3 {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.modal-fermer {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--gris-txt);
+  padding: 4px;
+  border-radius: 6px;
+  transition: color .15s;
+}
+
+.modal-fermer:hover {
+  color: var(--marron);
+}
+
+.modal-body {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.champ-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.champ-form label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--gris-txt);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.champ-form input {
+  border: 1.5px solid var(--gris-brd);
+  border-radius: 8px;
+  padding: 8px 11px;
+  font-family: inherit;
+  font-size: 13.5px;
+  color: var(--texte);
+  outline: none;
+  transition: border-color .2s;
+}
+
+.champ-form input:focus {
+  border-color: var(--bleu);
+}
+
+.modal-footer {
+  padding: 14px 20px;
+  border-top: 1px solid var(--gris-brd);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-annuler {
+  background: none;
+  border: 1.5px solid var(--gris-brd);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--gris-txt);
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.btn-annuler:hover {
+  border-color: var(--marron);
+  color: var(--marron);
+}
+
+.btn-sauver {
+  background: var(--bleu);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--blanc);
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.btn-sauver:hover {
+  background: var(--bleu2);
+}
+
+.msg-erreur {
+  font-size: 13px;
+  color: #c0392b;
+  font-weight: 600;
+  background: #fdecea;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 3px solid #c0392b;
+}
+
+/* ── LISTE CHECKBOXES (compétences / lacunes) ── */
+.liste-checkbox {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px 12px;
+  border: 1.5px solid var(--bleu);
+  border-radius: 8px;
+  background: #eff6ff;
+}
+
+.liste-checkbox.lacune-checkbox {
+  border: 1.5px solid var(--orange2);
+  background: #fdf0e6;
+}
+
+.lacune-checkbox .checkbox-item input[type="checkbox"] {
+  accent-color: var(--orange2);
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--texte);
+  cursor: pointer;
+}
+
+.checkbox-item input[type="checkbox"] {
+  accent-color: var(--bleu);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.btn-enregistrer-comp {
+  margin-top: 8px;
+  background: var(--bleu);
+  color: var(--blanc);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+  align-self: flex-start;
+}
+
+.btn-enregistrer-lacune {
+  margin-top: 8px;
+  background: var(--orange2);
+  color: var(--blanc);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+  align-self: flex-start;
+}
+.titre-lacune {
+  color: var(--orange);
+}
