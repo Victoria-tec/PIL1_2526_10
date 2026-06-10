@@ -1,48 +1,55 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/style.css">
-    <script src="../static/script.js" type="module"></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="{% static 'script.js' %}" type="module"></script>
     <title>IFRI MentorLink</title>
 </head>
 <body>
     <header>
-        <div><img class="logo" src="../static/images/logo.png" alt="logo"></div>
+        <div><img class="logo" src="{% static 'images/logo.png' %}" alt="logo"></div>
         <hr>
     </header>
     <div class="match-results">
         <div class="filtrage">
             <h2>Options de filtrage :</h2>
-            <select name="sexe" id="filtrage-sexe">
-                <option value="homme">Homme</option>
-                <option value="femme">Femme</option>
-            </select>
-            <select name="niveau" id="filtrage-niveau">
-                <option value="L1">L1</option>
-                <option value="L2">L2</option>
-                <option value="L3">L3</option>
-                <option value="M1">M1</option>
-                <option value="M2">M2</option>
-            </select>
-            <select name="filiere" id="filtrage-filiere">
-                <option value="GL">GL</option>
-                <option value="IA">IA</option>
-                <option value="IoT">IoT</option>
-                <option value="SI">SI</option>
-                <option value="IM">IM</option>
-            </select>
-            <button class="blue-button" id="filter" style="background-color: var(--bleu);">Filtrer</button>
+            <form method="GET" action="{% url 'recherche_matchs' %}">
+                <select name="sexe" id="filtrage-sexe">
+                    <option value="">Tous</option>
+                    <option value="M" {% if sexe_filtre == 'M' %}selected{% endif %}>Homme</option>
+                    <option value="F" {% if sexe_filtre == 'F' %}selected{% endif %}>Femme</option>
+                </select>
+                <select name="niveau" id="filtrage-niveau">
+                    <option value="">Tous</option>
+                    <option value="L1" {% if niveau_filtre == 'L1' %}selected{% endif %}>L1</option>
+                    <option value="L2" {% if niveau_filtre == 'L2' %}selected{% endif %}>L2</option>
+                    <option value="L3" {% if niveau_filtre == 'L3' %}selected{% endif %}>L3</option>
+                    <option value="M1" {% if niveau_filtre == 'M1' %}selected{% endif %}>M1</option>
+                    <option value="M2" {% if niveau_filtre == 'M2' %}selected{% endif %}>M2</option>
+                </select>
+                <select name="filiere" id="filtrage-filiere">
+                    <option value="">Tous</option>
+                    <option value="GL" {% if filiere_filtre == 'GL' %}selected{% endif %}>GL</option>
+                    <option value="IA" {% if filiere_filtre == 'IA' %}selected{% endif %}>IA</option>
+                    <option value="SE_IoT" {% if filiere_filtre == 'SE_IoT' %}selected{% endif %}>IoT</option>
+                    <option value="SI" {% if filiere_filtre == 'SI' %}selected{% endif %}>SI</option>
+                    <option value="IM" {% if filiere_filtre == 'IM' %}selected{% endif %}>IM</option>
+                </select>
+                <button class="blue-button" id="filter" style="background-color: var(--bleu);">Filtrer</button>
+            </form>
         </div>
-        <h1>Veuillez choisir un mentor</h1>
-        <button id="cancel-match">Annuler le processus</button>
+        <h1>{{ titre|default:"Veuillez choisir un mentor" }}</h1>
+        <a href="{% url 'hub' %}"><button id="cancel-match">Annuler le processus</button></a>
         <div class="matchs-list">
-            <match-proposition nom="TOSSAVI" prenom="Claude" niveau="M1" score="95"></match-proposition>
-            <match-proposition nom="TOSSAVI" prenom="Claude" niveau="M1" score="75"></match-proposition>
-            <match-proposition nom="TOSSAVI" prenom="Claude" niveau="M1" score="50"></match-proposition>
-            <match-proposition nom="TOSSAVI" prenom="Claude" niveau="M1" score="20"></match-proposition>
-            <match-proposition nom="TOSSAVI" prenom="Claude" niveau="M1" score="5"></match-proposition>
+            {% for match in matchs %}
+            <match-proposition user-id="{{ match.user.id }}" nom="{{ match.user.last_name }}" prenom="{{ match.user.first_name }}"
+                niveau="{{ match.user.profile.niveau }}" score="{{ match.score }}" matiere="{{ match.matiere }}"></match-proposition>
+            {% empty %}
+            <p style="text-align:center;grid-column:1/-1;">Aucun match trouvé. Complétez votre profil pour obtenir des suggestions.</p>
+            {% endfor %}
         </div>
     </div>
 </body>

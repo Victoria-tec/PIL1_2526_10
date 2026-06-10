@@ -1,0 +1,100 @@
+{% load static %}
+{% load extra_filters %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Compléter mon profil – IFRI MentorLink</title>
+    <style>
+        .liste-checkbox { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; max-height: 200px; overflow-y: auto; padding: 10px 12px; border: 1.5px solid var(--bleu); border-radius: 8px; background: #eff6ff; width: 60%; }
+        .liste-checkbox.lacune-list { border-color: var(--orange); background: #fdf0e6; }
+        .checkbox-item { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 500; cursor: pointer; }
+        .checkbox-item input[type="checkbox"] { accent-color: var(--bleu); width: 15px; height: 15px; cursor: pointer; }
+        .lacune-list .checkbox-item input[type="checkbox"] { accent-color: var(--orange); }
+        .dispo-row { display: flex; gap: 12px; align-items: center; margin: 8px 0; flex-wrap: wrap; }
+    </style>
+</head>
+<body>
+    <div class="inscription-block" style="max-width: 600px;">
+        <div style="align-self: center; display: flex; flex-direction: column; align-items: center; color: var(--bleu);">
+            <h1>Finalisez votre inscription</h1>
+            <div class="stick"></div>
+        </div>
+        <p style="text-align:center;">Renseignez votre profil pour que notre algorithme puisse vous trouver les meilleurs matchs.</p>
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align: center;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        <form method="POST" action="{% url 'completer_profil' %}" id="completer-form">
+            {% csrf_token %}
+
+            <label for="filiere">Votre filière</label>
+            <select name="filiere" id="filiere" required>
+                <option value="">Choisissez votre filière</option>
+                <option value="IA">Intelligence Artificielle (IA)</option>
+                <option value="IM">Internet et Multimédia (IM)</option>
+                <option value="GL">Génie Logiciel (GL)</option>
+                <option value="SE_IoT">Systèmes Embarqués & IoT</option>
+                <option value="SI">Systèmes d'Information (SI)</option>
+            </select>
+
+            <label for="niveau">Votre niveau d'études</label>
+            <select name="niveau" id="niveau" required>
+                <option value="">Choisissez votre niveau</option>
+                <option value="L1">Licence 1 (L1)</option>
+                <option value="L2">Licence 2 (L2)</option>
+                <option value="L3">Licence 3 (L3)</option>
+                <option value="M1">Master 1 (M1)</option>
+                <option value="M2">Master 2 (M2)</option>
+            </select>
+
+            <label>Vos compétences (points forts)</label>
+            <div class="liste-checkbox" id="comp-list">
+                {% for opt in "Python,Machine Learning,Algorithmique,JavaScript,C/C++,Réseaux,Bases de données,Mathématiques,Linux,Git,Développement web,Anglais technique"|split:"," %}
+                <label class="checkbox-item">
+                    <input type="checkbox" name="competences_list" value="{{ opt }}"> {{ opt }}
+                </label>
+                {% endfor %}
+            </div>
+
+            <label>Vos lacunes (points faibles)</label>
+            <div class="liste-checkbox lacune-list" id="lacune-list">
+                {% for opt in "Python,Machine Learning,Algorithmique,JavaScript,C/C++,Réseaux,Bases de données,Mathématiques,Linux,Git,Développement web,Anglais technique"|split:"," %}
+                <label class="checkbox-item">
+                    <input type="checkbox" name="lacunes_list" value="{{ opt }}"> {{ opt }}
+                </label>
+                {% endfor %}
+            </div>
+
+            <label>Vos disponibilités</label>
+            <div class="dispo-row">
+                <input type="datetime-local" name="dispo_debut" required>
+                <span>à</span>
+                <input type="datetime-local" name="dispo_fin" required>
+            </div>
+
+            <input type="hidden" name="competences" id="competences-hidden">
+            <input type="hidden" name="lacunes" id="lacunes-hidden">
+
+            <button class="blue-button" style="margin-top: 20px;" id="btn-enregistrer">Enregistrer et continuer</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById("btn-enregistrer").addEventListener("click", function(e){
+            e.preventDefault();
+            var comps = Array.from(document.querySelectorAll("input[name='competences_list']:checked")).map(function(cb){ return cb.value; });
+            var lacunes = Array.from(document.querySelectorAll("input[name='lacunes_list']:checked")).map(function(cb){ return cb.value; });
+            if (comps.length === 0 && lacunes.length === 0) {
+                alert("Veuillez sélectionner au moins une compétence ou une lacune.");
+                return;
+            }
+            document.getElementById("competences-hidden").value = comps.join(", ");
+            document.getElementById("lacunes-hidden").value = lacunes.join(", ");
+            document.getElementById("completer-form").submit();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ proposal.get_type_display }} – IFRI MentorLink</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="inscription-block">
+        <h1>{{ proposal.get_type_display }}</h1>
+        <h2>{{ proposal.matiere }}</h2>
+        <p>{{ proposal.description }}</p>
+        <p><strong>Auteur :</strong> {{ proposal.auteur.get_full_name }}</p>
+        <p><strong>Disponibilité :</strong> {{ proposal.disponibilite_debut }} – {{ proposal.disponibilite_fin }}</p>
+        <p><strong>Modalité :</strong> {{ proposal.get_modalite_display }}</p>
+        <p><strong>Statut :</strong> {{ proposal.get_statut_display }}</p>
+        <a href="{% url 'liste_proposals' %}">Retour à la liste</a>
+    </div>
+</body>
+</html>

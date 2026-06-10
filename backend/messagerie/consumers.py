@@ -1,8 +1,11 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
+from django.contrib.auth import get_user_model
 from .models import Conversation, Message
-from django.contrib.auth.models import User
+
+User = get_user_model()
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
@@ -10,7 +13,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.conversation_id = self.scope['url_route']['kwargs']['conversation_id']
         self.room_group_name = f'chat_{self.conversation_id}'
 
-        # Rejoindre le groupe de la conversation
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
@@ -18,7 +20,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        # Quitter le groupe
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -29,22 +30,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
         contenu = data['contenu']
         user = self.scope['user']
 
-        # Sauvegarder le message dans la BDD
         message = await self.sauvegarder_message(user, contenu)
 
-        # Envoyer le message à tout le groupe
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'chat_message',
                 'message': contenu,
-                'expediteur': user.username,
+                'expediteur': user.get_full_name() or user.username,
                 'envoye_le': message.envoye_le.strftime('%H:%M'),
             }
         )
 
     async def chat_message(self, event):
-        # Envoyer le message au WebSocket
         await self.send(text_data=json.dumps({
             'message': event['message'],
             'expediteur': event['expediteur'],

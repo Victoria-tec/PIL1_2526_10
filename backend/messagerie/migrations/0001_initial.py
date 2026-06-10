@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 ('contenu', models.TextField()),
                 ('envoye_le', models.DateTimeField(auto_now_add=True)),
                 ('lu', models.BooleanField(default=False)),
-                ('conversation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='messages', to='messagerie.conversation')),
+                ('conversation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='messages', to='backend_messagerie.conversation')),
                 ('expediteur', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),

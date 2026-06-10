@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -5,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Messagerie – IFRI MentorLink</title>
-    <link rel="stylesheet" href="../static/chat.css" />
+    <link rel="stylesheet" href="{% static 'chat.css' %}" />
 </head>
 
 <body>
@@ -17,7 +18,27 @@
             <div class="sidebar-top">
                 <h2>Messages</h2>
             </div>
-            <div class="liste-convs" id="listeConvs"></div>
+            <div class="liste-convs" id="listeConvs">
+                {% for conv in conversations %}
+                <div class="conv-item" onclick="ouvrirConversation({{ conv.id }})">
+                    <div class="av" style="background:#1a4a8a">
+                        {{ conv.participants.all|first }}
+                        <span class="online-dot"></span>
+                    </div>
+                    <div class="conv-info">
+                        <div class="conv-nom">
+                            <span>Conversation {{ conv.id }}</span>
+                            <span class="conv-heure">{{ conv.creee_le|date:"H:i" }}</span>
+                        </div>
+                        <div class="conv-apercu">
+                            <span>{{ conv.messages.last.contenu|truncatechars:30 }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p style="text-align:center;color:var(--gris-txt);padding:20px;">Aucune conversation</p>
+                {% endfor %}
+            </div>
         </aside>
 
         <!-- ZONE CHAT -->
@@ -62,7 +83,7 @@
         </section>
     </div>
 
-    <script src="../static/chat.js"></script>
+    <script src="{% static 'chat.js' %}"></script>
 </body>
 
 </html>

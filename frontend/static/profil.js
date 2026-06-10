@@ -1,21 +1,11 @@
 // profil.js  –  Page Profil IFRI MentorLink
 
-// ──────────────────────────────────────────
-// DONNÉES (dans la vraie version : fetch API)
-// ──────────────────────────────────────────
-const profil = {
-  nom: 'Koffi',
-  prenom: 'Aimé',
-  email: 'aime.koffi@etud.ifri.uac.bj',
-  tel: '+229 01 00 00 00',
-  filiere: 'IA',
-  niveau: 'L2'
-};
+const profil = window.profilData || {};
 
 // labels lisibles pour filière et niveau
 const labelFiliere = {
   IA: 'Intelligence Artificielle (IA)',
-  IM: 'Ingénierie Mathématique (IM)',
+  IM: 'Internet et Multimédia (IM)',
   GL: 'Génie Logiciel (GL)',
   SE_IoT: 'Systèmes Embarqués & IoT',
   SI: "Systèmes d'Information (SI)"
@@ -58,7 +48,6 @@ function sauverChamp(champ) {
 
   let valeur = input.value.trim();
   if (!valeur) {
-    // si vide on remet l'ancienne valeur
     input.value = aff.textContent;
     valeur = aff.textContent;
   }
@@ -67,7 +56,6 @@ function sauverChamp(champ) {
   if (champ === 'filiere') {
     aff.textContent = labelFiliere[input.value] || input.value;
     profil.filiere = input.value;
-    // mettre à jour la sidebar aussi
     mettreAJourSidebar();
   } else if (champ === 'niveau') {
     aff.textContent = labelNiveau[input.value] || input.value;
@@ -78,15 +66,40 @@ function sauverChamp(champ) {
     profil[champ] = valeur;
   }
 
-  // si c'est nom ou prénom, mettre à jour l'avatar et la sidebar
   if (champ === 'nom' || champ === 'prenom') {
     mettreAJourSidebar();
   }
 
-  // cacher l'input, remontrer l'affichage
   aff.classList.remove('cache');
   if (ligne) ligne.querySelector('.btn-stylet').classList.remove('cache');
   input.classList.add('cache');
+
+  // envoyer au serveur
+  envoyerAuServeur(champ, valeur);
+}
+
+function envoyerAuServeur(champ, valeur) {
+  var body = {};
+  var map = { nom: 'last_name', prenom: 'first_name', tel: 'telephone' };
+  var key = map[champ] || champ;
+  body[key] = valeur;
+  if (window.profilSaveUrl) {
+    fetch(window.profilSaveUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCSRF() },
+      body: JSON.stringify(body)
+    });
+  }
+}
+
+function getCSRF() {
+  var name = 'csrftoken';
+  var cookies = document.cookie.split(';');
+  for (var i = 0; i < cookies.length; i++) {
+    var c = cookies[i].trim();
+    if (c.indexOf(name + '=') === 0) return c.substring(name.length + 1);
+  }
+  return '';
 }
 
 // Entrée = sauvegarder, Echap = annuler
@@ -158,11 +171,10 @@ function activerTags(type) {
     btn.textContent = 'Enregistrer';
 
     btn.addEventListener('click', function () {
-      // vider tous les tags existants dans la zone
       zone.innerHTML = '';
 
-      // relire toutes les cases cochées et recréer les tags
       const classeTag = type === 'comp' ? 'tag-comp' : 'tag-lacune';
+      var tags = [];
       liste.querySelectorAll('input[type="checkbox"]').forEach(function (cb) {
         if (cb.checked) {
           const span = document.createElement('span');
@@ -170,11 +182,23 @@ function activerTags(type) {
           span.setAttribute('data-val', cb.value);
           span.textContent = cb.value;
           zone.appendChild(span);
+          tags.push(cb.value);
         }
       });
 
-      // cacher la liste
       add.classList.add('cache');
+
+      // sauvegarder côté serveur
+      var body = {};
+      var champ = type === 'comp' ? 'competences' : 'lacunes';
+      body[champ] = tags.join(' ');
+      if (window.profilSaveUrl) {
+        fetch(window.profilSaveUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCSRF() },
+          body: JSON.stringify(body)
+        });
+      }
     });
 
     add.appendChild(liste);
@@ -222,15 +246,17 @@ function supprimerTag(type, valeur) {
 // SIDEBAR : mettre à jour nom, avatar, filière
 // ──────────────────────────────────────────
 function mettreAJourSidebar() {
-  const nomComplet = profil.prenom + ' ' + profil.nom;
+  var prenom = profil.first_name || profil.prenom || '';
+  var nom = profil.last_name || profil.nom || '';
+  var nomComplet = prenom + ' ' + nom;
   document.getElementById('sideNom').textContent = nomComplet;
 
-  // initiales pour l'avatar
-  const ini = (profil.nom.charAt(0) + profil.prenom.charAt(0)).toUpperCase();
+  var ini = (nom.charAt(0) + prenom.charAt(0)).toUpperCase();
   document.getElementById('sideAvatar').textContent = ini;
 
-  // badge filière + niveau
-  document.getElementById('sideFiliere').textContent = profil.filiere + ' — ' + profil.niveau;
+  var fil = profil.filiere || '';
+  var niv = profil.niveau || '';
+  document.getElementById('sideFiliere').textContent = fil + ' — ' + niv;
 }
 
 // ──────────────────────────────────────────

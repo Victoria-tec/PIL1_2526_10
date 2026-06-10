@@ -2,20 +2,20 @@ class PageHeader extends HTMLElement{
     connectedCallback(){
         let type = this.getAttribute("variante")
         this.innerHTML = `
-                <div class="logo"><img src="../static/images/logo.png" alt="logo"></div>
+                <div class="logo"><img src="/static/images/logo.png" alt="logo"></div>
                 <div class="header-buttons">
                     ${type === "accueil" ? `
-                            <a href="base.html">
+                            <a href="/">
                                 <h3>Accueil</h3>
                             </a>
-                            <a href="gestion_comptes/inscription.html">
+                            <a href="/comptes/inscription/">
                                 <h3>S'inscrire</h3>
                             </a>
-                            <a href="gestion_comptes/connexion.html">
+                            <a href="/comptes/connexion/">
                                 <h3>Se connecter</h3>
                             </a>
                         ` : `
-                            <a href="base.html">
+                            <a href="/">
                                 <h3>Accueil</h3>
                             </a>
                         `}
@@ -36,11 +36,24 @@ class PageFooter extends HTMLElement{
     }
 }
 
+function getCSRF() {
+    var name = "csrftoken";
+    var cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++) {
+        var c = cookies[i].trim();
+        if (c.indexOf(name + "=") === 0) return c.substring(name.length + 1);
+    }
+    return "";
+}
+
+function allerProfil(userId) {
+    window.location.href = "/profil/" + userId + "/";
+}
+
 customElements.define("page-header", PageHeader)
 customElements.define("page-footer", PageFooter)
 
 /*Début config base.html*/
-
 class Block extends HTMLElement{
     connectedCallback(){
         const titre = this.getAttribute("titre")
@@ -58,7 +71,6 @@ class Block extends HTMLElement{
 
 customElements.define("page-block", Block)
 
-/*Animations dynamiques à base d'un observateur*/
 const observer = new IntersectionObserver ((elements) =>{
     elements.forEach(element =>{
         if(element.isIntersecting){
@@ -74,7 +86,6 @@ document.querySelectorAll("page-block").forEach(block =>{
 if(document.querySelector(".presentation-block")){
     observer.observe(document.querySelector(".presentation-block"))
 }
-
 /*Fin config base.html*/
 
 /*Config formulaire d'inscription*/
@@ -82,139 +93,20 @@ let inscription_form = document.getElementById("inscription-form")
 let pwd_submission = document.getElementById("password-submission")
 let inscription_text = document.getElementById("inscription-text")
 
-/*Gestion mot de passe*/
 const pwd_submission_error_message = document.createElement("p")
-pwd_submission_error_message.textContent = "Les motes de passe ne correspondent pas"
+pwd_submission_error_message.textContent = "Les mots de passe ne correspondent pas"
 pwd_submission_error_message.classList.add("pwd-different")
 
-const password_gestion = (pwd, confirmed_pwd, e) => {
-    if (pwd !== confirmed_pwd){
-        e.preventDefault()
-        pwd_submission.appendChild(pwd_submission_error_message)
-        return
-    }else{
-        pwd_submission_error_message.remove()
-        e.preventDefault()
-
-        inscription_text.textContent = "Finaliser votre inscription"
-        inscription_form.innerHTML = `
-            <form action="#" id="inscription-form">
-                <label for="level">Votre niveau d'études</label>
-                <select id="level" name="level" required>
-                    <option>L1</option>
-                    <option>L2</option>
-                    <option>L3</option>
-                    <option>M3</option>
-                    <option>M2</option>
-                </select>
-                <label for="filiere">Votre filière</label>
-                <select id="filiere" name="filiere" required>
-                    <option>IA</option>
-                    <option>GL</option>
-                    <option>SEIoT</option>
-                    <option>SI</option>
-                    <option>IM</option>
-                </select>
-                <fieldset style="width: 80%;">
-                    <legend>Vos points forts</legend>
-                    <div class="points-forts-line">
-                        <label for="algo">Algorithmique</label>
-                        <input type="checkbox" id="algo" name="algo">
-
-                        <label for="python">Python</label>
-                        <input type="checkbox" id="python" name="python">
-
-                        <label for="machine-learning>Machine-learning</label>
-                        <input type="checkbox" id="machine-learning" name="machine-learning">
-
-                        <label for="javascript">Javascript</label>
-                        <input type="checkbox" id="javascript" name="javascript">
-
-                        <label for="c/c++">C/C++</label>
-                        <input type="checkbox" id="c/c++" name="c/c++">
-
-                        <label for="reseaux">Réseaux</label>
-                        <input type="checkbox" id="reseaux" name="reseaux">
-
-                        <label for="base de données">Base de données</label>
-                        <input type="checkbox" id="base de données" name="base de données">
-
-                        <label for="mathematiques">Mathématiques</label>
-                        <input type="checkbox" id="mathematiques" name="mathematiques">
-
-                        <label for="linux">Linux</label>
-                        <input type="checkbox" id="linux" name="linux">
-
-                        <label for="git">Git</label>
-                        <input type="checkbox" id="git" name="git">
-                    </div>
-                </fieldset>
-                <fieldset style="width: 80%;">
-                    <legend>Vos points faibles</legend>
-                    <div class="points-forts-line">
-                        <label for="algo">Algorithmique</label>
-                        <input type="checkbox" id="algo" name="algo">
-
-                        <label for="python">Python</label>
-                        <input type="checkbox" id="python" name="python">
-
-                        <label for="machine-learning>Machine-learning</label>
-                        <input type="checkbox" id="machine-learning" name="machine-learning">
-
-                        <label for="javascript">Javascript</label>
-                        <input type="checkbox" id="javascript" name="javascript">
-
-                        <label for="c/c++">C/C++</label>
-                        <input type="checkbox" id="c/c++" name="c/c++">
-
-                        <label for="reseaux">Réseaux</label>
-                        <input type="checkbox" id="reseaux" name="reseaux">
-
-                        <label for="base de données">Base de données</label>
-                        <input type="checkbox" id="base de données" name="base de données">
-
-                        <label for="mathematiques">Mathématiques</label>
-                        <input type="checkbox" id="mathematiques" name="mathematiques">
-
-                        <label for="linux">Linux</label>
-                        <input type="checkbox" id="linux" name="linux">
-
-                        <label for="git">Git</label>
-                        <input type="checkbox" id="git" name="git">
-                    </div>
-                </fieldset>
-
-                <button class="blue-button" id="submission-button">Soumettre</button>
-            </form>
-        `
-        
-        document.getElementById("inscription-form").addEventListener("submit", (e) => {
-            e.preventDefault()
-            window.location.href = "../hub.html"
-        })
-    }
-}
-
-if(pwd_submission){
-    let submitted_password = ""
-    let confirmed_submitted_password = ""
-
-    document.getElementById("pwd").addEventListener("input", () =>{
-        submitted_password = document.getElementById("pwd").value
-    })
-
-    document.getElementById("confirm-pwd").addEventListener("input", () =>{
-        confirmed_submitted_password = document.getElementById("confirm-pwd").value
-    })
-
+if(inscription_form){
     inscription_form.addEventListener("submit", (e) =>{
-        password_gestion(submitted_password, confirmed_submitted_password, e)
+        const pwd = document.getElementById("mot_de_passe").value
+        const confirmed_pwd = document.getElementById("confirmation_mot_de_passe").value
+        if (pwd !== confirmed_pwd){
+            e.preventDefault()
+            pwd_submission.appendChild(pwd_submission_error_message)
+        }
     })
 }
-
-/*Fin gestion mot de passe*/
-
-
 /*Fin config formulaire d'inscription*/
 
 /* Gestion modification mot de passe*/
@@ -242,7 +134,6 @@ if(modify_pwd_form){
                 <div id="password-submission">
                     <label for="pwd">Nouveau mot de passe</label>
                     <input type="password" id="pwd" name="mot_de_passe" required>
-
                     <label for="confirm-pwd">Confirmez votre nouveau mot de passe</label>
                     <input type="password" id="confirm-pwd" name="confirmation_mot_de_passe" required>
                 </div>
@@ -260,7 +151,7 @@ if(modify_pwd_form){
                 return
             }
 
-            window.location.href = "../hub.html"
+            window.location.href = "/hub/"
         }
     }
 
@@ -268,23 +159,23 @@ if(modify_pwd_form){
 }
 
 /*Main Page*/
-
 class SideBar extends HTMLElement{
     connectedCallback(){
         let user_name = this.getAttribute("user-name")
+        let profil_url = this.getAttribute("profil-url") || "/comptes/profil/"
         this.innerHTML = `
                 <div class="profile-pic-box"></div>
                 <div style="text-align: center"><p style="margin-top: 0; margin-bottom: 0; color: white;">${user_name}</p></div>
-                <div class="side-bar-button" path="#">
-                    <img src="../static/images/message-bubble.png" alt="profil" class="side-bar-icon">
+                <div class="side-bar-button" path="${profil_url}">
+                    <img src="/static/images/user-icon.png" alt="profil" class="side-bar-icon">
                     <p>Profil</p>
                 </div>
-                <div class="side-bar-button" path="./chat.html">
-                    <img src="../static/images/user-icon.png" alt="messagerie" class="side-bar-icon">
+                <div class="side-bar-button" path="/messagerie/">
+                    <img src="/static/images/message-bubble.png" alt="messagerie" class="side-bar-icon">
                     <p>Messagerie</p>
                 </div>
-                <div class="side-bar-button" path="./base.html">
-                    <img src="../static/images/exit.png" alt="deconnexion" class="side-bar-icon">
+                <div class="side-bar-button" path="/">
+                    <img src="/static/images/exit.png" alt="deconnexion" class="side-bar-icon">
                     <p>Accueil</p>
                 </div>
                 <p>IFRI, Nous visons l'excellence !</p>
@@ -302,41 +193,62 @@ class SideBar extends HTMLElement{
 customElements.define("side-bar", SideBar)
 
 let creation_btn = document.getElementById("creation-button")
-
 if(creation_btn){
     creation_btn.addEventListener("click", () =>{
-        window.location.href = "formulaire.html"
+        window.location.href = "/proposals/creer/"
     })
-
 }
 
 class MatchBlock extends HTMLElement{
     connectedCallback(){
+        let variant = this.getAttribute("variant") || ""
         let student_nom = this.getAttribute("student-nom")
         let student_prenom = this.getAttribute("student-prenom")
-        let student_pic = this.getAttribute("student-pic")
         let mentor_nom = this.getAttribute("mentor-nom")
         let mentor_prenom = this.getAttribute("mentor-prenom")
-        let mentor_pic = this.getAttribute("mentor-pic")
         let topic = this.getAttribute("topic")
         let status = this.getAttribute("status")
         let compatibility_score = this.getAttribute("compatibility-score")
+        let userId = this.getAttribute("user-id")
+        let matchId = this.getAttribute("match-id")
+
+        if (variant === "suggestion") {
+            this.innerHTML = `
+                <div style="display: flex; height: 50%; width: 100%;">
+                    <div class="block-half" data-usertype="student">
+                        <div class="mini-profile-pic" data-user-id="${userId}"></div>
+                        <h5>${student_nom} <br> ${student_prenom}</h5>
+                    </div>
+                    <div class="block-half" data-usertype="mentor">
+                        <h5>${mentor_nom} <br> ${mentor_prenom}</h5>
+                        <div class="mini-profile-pic" data-user-id="${userId}"></div>
+                    </div>
+                </div>
+                <h4>--${topic}--</h4>
+                <div style="display: flex; gap: 3px; align-items: center; justify-content: center; margin-top: 0">
+                    <div class="compatibility" style="width: 40%; height: 27%; height: 40%; margin-top: 0"><h5>Compatibilité : ${compatibility_score}%</h5></div>
+                    <button class="validation matcher-btn" data-user-id="${userId}" data-score="${compatibility_score}" data-matiere="${topic}" style="border-style: none; width: 27%; height: 40%; margin-top: 0; background-color: var(--bleu);"><h5>Matcher</h5></button>
+                </div>
+            `
+            return;
+        }
+
         this.innerHTML = `
                     <div style="display: flex; height: 50%; width: 100%;">
-                        <div class="block-half" data-usertype = "student">
-                            <div class="mini-profile-pic"></div>
+                        <div class="block-half" data-usertype="student">
+                            <div class="mini-profile-pic" data-user-id="${userId}"></div>
                             <h5>${student_nom} <br> ${student_prenom}</h5>
                         </div>
                         <div class="block-half" data-usertype="mentor">
                             <h5>${mentor_nom} <br> ${mentor_prenom}</h5>
-                            <div class="mini-profile-pic"></div>
+                            <div class="mini-profile-pic" data-user-id="${userId}"></div>
                         </div>
                     </div>
                     <h4>--${topic}--</h4>
                     <div style="display: flex; gap: 3px; align-items: center; justify-content: center; margin-top: 0">
                         <div class="compatibility" style="width: 40%; height: 27%; height: 40%; margin-top: 0"><h5>Compatibilité : ${compatibility_score}%</h5></div>
-                        <button class="validation" style="border-style: none; width: 27%; height: 40%; margin-top: 0"><h5>${status==="validated" ? `Conversation` : status==="waiting-for-validation" ? `Annuler` : `Valider`}</h5></button>
-                        ${status !=="waiting-for-validation" ? `<button class="validation" style="border-style: none; width: 27%; height: 40%; margin-top: 0; background-color: rgb(189, 22, 22);"><h5>${status==="validated" ? `Achever` : `Rejeter`}</h5></button>` : ``}
+                        <button class="validation" data-action="${status==="validated" ? "conversation" : status==="waiting-for-validation" ? "annuler" : "valider"}" data-match-id="${matchId}" style="border-style: none; width: 27%; height: 40%; margin-top: 0"><h5>${status==="validated" ? `Conversation` : status==="waiting-for-validation" ? `Annuler` : `Valider`}</h5></button>
+                        ${status !=="waiting-for-validation" ? `<button class="validation" data-action="${status==="validated" ? "terminer" : "rejeter"}" data-match-id="${matchId}" style="border-style: none; width: 27%; height: 40%; margin-top: 0; background-color: rgb(189, 22, 22);"><h5>${status==="validated" ? `Achever` : `Rejeter`}</h5></button>` : ``}
                     </div>
         `
     }
@@ -344,34 +256,66 @@ class MatchBlock extends HTMLElement{
 
 customElements.define("match-block", MatchBlock)
 
-document.body.addEventListener("click", (e) => {
-    if(e.target.classList.contains("mini-profile-pic")){
-        window.location.href = "profil-visiteur.html"
+/* Click handlers */
+document.body.addEventListener("click", function(e) {
+    /* Profile pic → profile page */
+    var pic = e.target.closest(".mini-profile-pic");
+    if (pic && pic.getAttribute("data-user-id")) {
+        allerProfil(pic.getAttribute("data-user-id"));
+        return;
     }
-})
+
+    /* Matcher button (suggestion variant) */
+    var matcher = e.target.closest(".matcher-btn");
+    if (matcher) {
+        var userId = matcher.getAttribute("data-user-id");
+        var score = matcher.getAttribute("data-score");
+        var matiere = matcher.getAttribute("data-matiere") || "";
+        fetch("/matching/accepter/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-CSRFToken": getCSRF() },
+            body: JSON.stringify({ user_id: parseInt(userId), score: parseInt(score), matiere: matiere })
+        }).then(function(r){ return r.json() }).then(function(d){
+            window.location.href = "/hub/";
+        });
+        return;
+    }
+
+    /* Match-block action buttons */
+    var btn = e.target.closest("[data-action]");
+    if (btn && btn.getAttribute("data-match-id")) {
+        var action = btn.getAttribute("data-action");
+        var matchId = btn.getAttribute("data-match-id");
+        if (action === "conversation") {
+            window.location.href = "/messagerie/";
+            return;
+        }
+        if (action === "valider" || action === "rejeter" || action === "terminer" || action === "annuler") {
+            fetch("/matching/repondre/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-CSRFToken": getCSRF() },
+                body: JSON.stringify({ match_id: parseInt(matchId), action: action })
+            }).then(function(r){ return r.json() }).then(function(d){
+                window.location.reload();
+            });
+        }
+        return;
+    }
+});
 
 /* Fin main page*/
 
-/*Page formulaire de soumission*/
-
-let creation_form = document.getElementById("formulaire-offre-demande")
-if(creation_form){
-    creation_form.addEventListener("submit", () =>{
-        window.location.href = "resultats_matching.html"
-    })
-}
-
 /*Page résultats matching*/
-
 class MatchProposition extends HTMLElement{
     connectedCallback(){
         let match_nom = this.getAttribute("nom")
         let match_prenom = this.getAttribute("prenom")
         let match_niveau = this.getAttribute("niveau")
         let score = this.getAttribute("score")
+        let userId = this.getAttribute("user-id")
         this.innerHTML = `
                 <div class="block-half" data-type="mentor">
-                    <div class="mini-profile-pic"></div>
+                    <div class="mini-profile-pic" data-user-id="${userId}"></div>
                     <div class="match-infos">
                         <h3>${match_nom} <br> ${match_prenom}</h3>
                         <div><h5 style="font-style: italic;">${match_niveau}</h5></div>
@@ -397,14 +341,26 @@ class MatchProposition extends HTMLElement{
                 </div>
         `
         this.querySelector("circle").style.strokeDashoffset = 262-262*(score/100)
-
-        setTimeout(() => {
-            this.querySelector(".accept-match").addEventListener("click", () =>{
-                window.location.href = "hub.html"
-            })
-        }, 0)
-
     }
 }
 
 customElements.define("match-proposition", MatchProposition)
+
+/* Accept-match button on match-proposition (page resultats matching) */
+document.body.addEventListener("click", function(e) {
+    var btn = e.target.closest(".accept-match");
+    if (btn) {
+        var mp = btn.closest("match-proposition");
+        if (!mp) return;
+        var userId = mp.getAttribute("user-id");
+        var score = mp.getAttribute("score");
+        var matiere = mp.getAttribute("matiere") || "";
+        fetch("/matching/accepter/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-CSRFToken": getCSRF() },
+            body: JSON.stringify({ user_id: parseInt(userId), score: parseInt(score), matiere: matiere })
+        }).then(function(r){ return r.json() }).then(function(d){
+            window.location.href = "/hub/";
+        });
+    }
+});

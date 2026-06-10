@@ -1,49 +1,91 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/style.css">
-    <script src="../static/script.js" type="module"></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="{% static 'script.js' %}" type="module"></script>
     <title>IFRI MentorLink</title>
 </head>
 <body style="background-color: #eff6ff;">
     <div class="body-with-side-bar">
-        <side-bar user-name="DJIDONOU Paul"></side-bar>
+        <side-bar user-name="{{ user.first_name }} {{ user.last_name }}" profil-url="{% url 'profil' %}"></side-bar>
         <div class="body-without-side-bar">
             <div class="welcome-message">
-                <h1 style="font-size: 70px; animation: reverse-vertical-apparition 0.5s ease;">Bon retour Paul !</h1>
+                <h1 style="font-size: 70px; animation: reverse-vertical-apparition 0.5s ease;">Bon retour {{ user.first_name }} !</h1>
                 <h1 style="font-style: italic; animation: horizontal-apparition 0.3s ease forwards; animation-delay: 0.4s; opacity: 0;">On reprend le boulot ?</h1>
                 <div class="add-buttons">
-                    <button class="blue-button" id="creation-button">+ Créer</button>
+                    <a href="{% url 'creer_proposal' %}"><button class="blue-button" id="creation-button">+ Créer</button></a>
                 </div>
             </div>
+
+            {% if suggestions %}
+            <div class="category">
+                <h3>Pour vous</h3>
+                <div class="stick"></div>
+                <div class="category-blocks-box" id="pour-vous">
+                    {% for s in suggestions %}
+                    <match-block variant="suggestion" user-id="{{ s.user.id }}" score="{{ s.score }}"
+                        student-nom="{{ user.last_name }}" student-prenom="{{ user.first_name }}"
+                        mentor-nom="{{ s.user.last_name }}" mentor-prenom="{{ s.user.first_name }}"
+                        topic="{{ s.matiere|default:'Mentorat' }}" compatibility-score="{{ s.score }}"></match-block>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
             <div style="margin-top: 0; display: flex; flex-direction: column; align-items: center; align-self: center; color: black; animation: reverse-vertical-apparition 0.8s ease;">
                 <h1>VOTRE ACTIVITÉ</h1>
                 <div class="stick" style="background-color: black;"></div>
             </div>
+
             <div class="category">
             <h3>Matchs en cours</h3>
             <div class="stick"></div>
             <div class="category-blocks-box" id="en-cours">
-                <match-block student-nom="DJIDONOU" student-prenom="Marie-Véronique" mentor-nom="HOUENOU" mentor-prenom="Hughes" topic="Analyse" compatibility-score="70" status="validated"></match-block>
-                <match-block student-nom="DJIDONOU" student-prenom="Marie-Véronique" mentor-nom="HOUENOU" mentor-prenom="Hughes" topic="Analyse" compatibility-score="70" status="validated"></match-block>
-                <match-block student-nom="DJIDONOU" student-prenom="Marie-Véronique" mentor-nom="HOUENOU" mentor-prenom="Hughes" topic="Analyse" compatibility-score="70" status="validated"></match-block>
+                {% for match in matchs_en_cours %}
+                {% with u1=match.user1 u2=match.user2 %}
+                <match-block match-id="{{ match.id }}" user-id="{% if u1.id == user.id %}{{ u2.id }}{% else %}{{ u1.id }}{% endif %}"
+                    student-nom="{% if u1.id == user.id %}{{ u2.last_name }}{% else %}{{ u1.last_name }}{% endif %}" student-prenom="{% if u1.id == user.id %}{{ u2.first_name }}{% else %}{{ u1.first_name }}{% endif %}"
+                    mentor-nom="{% if u1.id != user.id %}{{ u2.last_name }}{% else %}{{ u1.last_name }}{% endif %}" mentor-prenom="{% if u1.id != user.id %}{{ u2.first_name }}{% else %}{{ u1.first_name }}{% endif %}"
+                    topic="{{ match.matiere|default:'Mentorat' }}" compatibility-score="{{ match.score }}" status="validated"></match-block>
+                {% endwith %}
+                {% empty %}
+                <p style="text-align:center;grid-column:1/-1;">Aucun match en cours</p>
+                {% endfor %}
             </div>
         </div>
         <div class="category">
             <h3>En attente de votre validation</h3>
             <div class="stick"></div>
             <div class="category-blocks-box" id="attente-validation">
-                <match-block student-nom="DJIDONOU" student-prenom="Paul" mentor-nom="HOUENOU" mentor-prenom="Hughes" topic="Algorithmique" compatibility-score="70" status="to-validate"></match-block>
+                {% for match in matchs_attente_validation %}
+                {% with u1=match.user1 u2=match.user2 %}
+                <match-block match-id="{{ match.id }}" user-id="{% if u1.id == user.id %}{{ u2.id }}{% else %}{{ u1.id }}{% endif %}"
+                    student-nom="{% if u1.id == user.id %}{{ u2.last_name }}{% else %}{{ u1.last_name }}{% endif %}" student-prenom="{% if u1.id == user.id %}{{ u2.first_name }}{% else %}{{ u1.first_name }}{% endif %}"
+                    mentor-nom="{% if u1.id != user.id %}{{ u2.last_name }}{% else %}{{ u1.last_name }}{% endif %}" mentor-prenom="{% if u1.id != user.id %}{{ u2.first_name }}{% else %}{{ u1.first_name }}{% endif %}"
+                    topic="{{ match.matiere|default:'Mentorat' }}" compatibility-score="{{ match.score }}" status="to-validate"></match-block>
+                {% endwith %}
+                {% empty %}
+                <p style="text-align:center;grid-column:1/-1;">Aucune validation en attente</p>
+                {% endfor %}
             </div>
         </div>
         <div class="category">
             <h3>En attente de réponse</h3>
             <div class="stick"></div>
             <div class="category-blocks-box" id="attente-reponse">
-                <match-block student-nom="DJIDONOU" student-prenom="Paul" mentor-nom="HOUENOU" mentor-prenom="Hughes" topic="Algorithmique" compatibility-score="70" status="waiting-for-validation"></match-block>
-                <match-block student-nom="DJIDONOU" student-prenom="Paul" mentor-nom="HOUENOU" mentor-prenom="Hughes" topic="Algorithmique" compatibility-score="70" status="waiting-for-validation"></match-block>
+                {% for match in matchs_attente_reponse %}
+                {% with u1=match.user1 u2=match.user2 %}
+                <match-block match-id="{{ match.id }}" user-id="{% if u1.id == user.id %}{{ u2.id }}{% else %}{{ u1.id }}{% endif %}"
+                    student-nom="{% if u1.id == user.id %}{{ u2.last_name }}{% else %}{{ u1.last_name }}{% endif %}" student-prenom="{% if u1.id == user.id %}{{ u2.first_name }}{% else %}{{ u1.first_name }}{% endif %}"
+                    mentor-nom="{% if u1.id != user.id %}{{ u2.last_name }}{% else %}{{ u1.last_name }}{% endif %}" mentor-prenom="{% if u1.id != user.id %}{{ u2.first_name }}{% else %}{{ u1.first_name }}{% endif %}"
+                    topic="{{ match.matiere|default:'Mentorat' }}" compatibility-score="{{ match.score }}" status="waiting-for-validation"></match-block>
+                {% endwith %}
+                {% empty %}
+                <p style="text-align:center;grid-column:1/-1;">Aucune demande en attente</p>
+                {% endfor %}
             </div>
         </div>
         </div>

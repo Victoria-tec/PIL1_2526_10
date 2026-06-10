@@ -1,5 +1,9 @@
 from django import forms
-from .models import User, Profile
+from django.contrib.auth import get_user_model
+from gestion_comptes.models import Profile
+
+User = get_user_model()
+
 
 class InscriptionForm(forms.ModelForm):
     mot_de_passe = forms.CharField(
@@ -14,13 +18,16 @@ class InscriptionForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['nom', 'prenom', 'email', 'telephone']
+        fields = ['last_name', 'first_name', 'email', 'telephone']
+        labels = {
+            'last_name': 'Nom',
+            'first_name': 'Prénom',
+        }
 
     def clean(self):
         cleaned_data = super().clean()
         mdp = cleaned_data.get('mot_de_passe')
         confirm = cleaned_data.get('confirmation_mot_de_passe')
-
         if mdp and confirm and mdp != confirm:
             raise forms.ValidationError("Les mots de passe ne correspondent pas.")
         return cleaned_data
@@ -32,17 +39,14 @@ class ConnexionForm(forms.Form):
         widget=forms.PasswordInput,
         label="Mot de passe"
     )
+
+
 class EmailReinitialisationForm(forms.Form):
-    # Étape 1 — L'utilisateur entre son email
-    email = forms.EmailField(
-        label="Votre adresse email"
-    )
+    email = forms.EmailField(label="Votre adresse email")
+
 
 class ReinitialisationMotDePasseForm(forms.Form):
-    # Étape 2 — L'utilisateur entre le code + nouveau mot de passe
-    code = forms.IntegerField(
-        label="Code reçu dans votre messagerie"
-    )
+    code = forms.IntegerField(label="Code reçu dans votre messagerie")
     nouveau_mot_de_passe = forms.CharField(
         widget=forms.PasswordInput,
         min_length=8,
@@ -57,7 +61,6 @@ class ReinitialisationMotDePasseForm(forms.Form):
         cleaned_data = super().clean()
         mdp = cleaned_data.get('nouveau_mot_de_passe')
         confirm = cleaned_data.get('confirmation_nouveau_mot_de_passe')
-
         if mdp and confirm and mdp != confirm:
             raise forms.ValidationError("Les mots de passe ne correspondent pas.")
         return cleaned_data
