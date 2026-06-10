@@ -1,223 +1,256 @@
 from django.shortcuts import render
-from backend.gestion_comptes.models import User, Profile
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from gestion_comptes.models import Profile
+from backend.offres_demandes.models import Proposal
 from .models import Matching
+from datetime import datetime
 
-def calculer_score(user_a, user_b, offres_a=None, demandes_a=None):
-    """
-    Calcule le score de compatibilité entre deux utilisateurs.
-    Le score est normalisé sur 100.
-    Priorité haute : matières compatibles + disponibilités horaires
-    Priorité basse : filière + niveau
-    """
+User = get_user_model()
+
+
+def _split(value):
+    if not value:
+        return set()
+    if ',' in value:
+        return set([v.strip() for v in value.split(',') if v.strip()])
+    return set([v.strip() for v in value.split() if v.strip()])
+
+
+def _parse_dispos(value):
+    """Parse disponibility : retourne (ranges_datetime, textes_set)."""
+    if not value:
+        return [], set()
+    items = [v.strip() for v in value.replace(';', ',').split(',') if v.strip()]
+    date_ranges = []
+    text_items = set()
+    for item in items:
+        if 'T' in item and ' - ' in item:
+            parts = item.split(' - ')
+            if len(parts) == 2:
+                try:
+                    start = datetime.fromisoformat(parts[0].strip())
+                    end = datetime.fromisoformat(parts[1].strip())
+                    date_ranges.append((start, end))
+                    continue
+                except ValueError:
+                    pass
+        text_items.add(item)
+    return date_ranges, text_items
+
+
+def _dispos_overlap(dispos_a, dispos_b):
+    """Retourne (nb_chevauchements, nb_total_possible)."""
+    items_a = [v.strip() for v in dispos_a.replace(';', ',').split(',') if v.strip()] if dispos_a else []
+    items_b = [v.strip() for v in dispos_b.replace(';', ',').split(',') if v.strip()] if dispos_b else []
+    if not items_a or not items_b:
+        return (0, 0)
+    ranges_a, texts_a = _parse_dispos(dispos_a)
+    ranges_b, texts_b = _parse_dispos(dispos_b)
+    overlap = len(texts_a & texts_b)
+    for r1 in ranges_a:
+        for r2 in ranges_b:
+            if r1[0] < r2[1] and r2[0] < r1[1]:
+                overlap += 1
+    return (overlap, max(len(items_a), len(items_b)))
+
+
+NIVEAUX_ORDER = {'L1': 1, 'L2': 2, 'L3': 3, 'M1': 4, 'M2': 5}
+
+
+def _calculer_score_dir(user_a, user_b, proposals_a=None):
+    """Calcule le score dans un sens (non symétrique)."""
     score_brut = 0
-    score_maximum = 0  # On calcule le maximum possible au fur et à mesure
+    score_maximum = 0
 
-    # ─────────────────────────────────────────
-    # Récupération des profils des deux utilisateurs
-    # Si l'un des deux n'a pas de profil → score = 0
-    # ─────────────────────────────────────────
     try:
         profile_a = user_a.profile
         profile_b = user_b.profile
     except Profile.DoesNotExist:
         return 0
 
-    # ─────────────────────────────────────────
-    # PRIORITÉ HAUTE 1 — Matières compatibles
-    # Compétences de A vs Lacunes de B
-    # 20 points par matière commune
-    # ─────────────────────────────────────────
-    competences_a = set(
-        [c.strip() for c in profile_a.competences.split(',') if c.strip()]
-    )
-    lacunes_b = set(
-        [l.strip() for l in profile_b.lacunes.split(',') if l.strip()]
-    )
+    competences_a = _split(profile_a.competences)
+    lacunes_b = _split(profile_b.lacunes)
 
-    # Nombre de matières en commun
     matieres_communes = competences_a & lacunes_b
-    points_matieres = len(matieres_communes) * 20
+    points_matieres = len(matieres_communes) * 35
     score_brut += points_matieres
+    score_maximum += len(lacunes_b) * 35
 
-    # Le maximum pour les matières = nombre de lacunes de B × 20
-    # (dans le meilleur des cas A couvre toutes les lacunes de B)
-    score_maximum += len(lacunes_b) * 20
+    overlap, max_dispo = _dispos_overlap(profile_a.disponibilites, profile_b.disponibilites)
+    if max_dispo > 0:
+        score_brut += round((overlap / max_dispo) * 40)
+    score_maximum += 40
 
-    # ─────────────────────────────────────────
-    # PRIORITÉ HAUTE 2 — Disponibilités communes
-    # 20 points si au moins une disponibilité commune
-    # ─────────────────────────────────────────
-    dispos_a = set(
-        [d.strip() for d in profile_a.disponibilites.split(',') if d.strip()]
-    )
-    dispos_b = set(
-        [d.strip() for d in profile_b.disponibilites.split(',') if d.strip()]
-    )
-    dispos_communes = dispos_a & dispos_b
-    if dispos_communes:
-        score_brut += 20
-    score_maximum += 20  # Maximum possible pour les disponibilités = 20
-
-    # ─────────────────────────────────────────
-    # PRIORITÉ BASSE 1 — Même filière
-    # 10 points
-    # ─────────────────────────────────────────
     if profile_a.filiere and profile_b.filiere:
         if profile_a.filiere.strip() == profile_b.filiere.strip():
             score_brut += 10
-    score_maximum += 10  # Maximum possible pour la filière = 10
+    score_maximum += 10
 
-    # ─────────────────────────────────────────
-    # PRIORITÉ BASSE 2 — Même niveau
-    # 10 points
-    # ─────────────────────────────────────────
     if profile_a.niveau and profile_b.niveau:
-        if profile_a.niveau.strip() == profile_b.niveau.strip():
-            score_brut += 10
-    score_maximum += 10  # Maximum possible pour le niveau = 10
+        na = NIVEAUX_ORDER.get(profile_a.niveau.strip(), 0)
+        nb = NIVEAUX_ORDER.get(profile_b.niveau.strip(), 0)
+        if na != nb:
+            score_brut += 15
+        else:
+            score_brut += 5
+    score_maximum += 15
 
-    # ─────────────────────────────────────────
-    # BONUS — Matching par formulaires
-    # Si A a publié des offres ou demandes
-    # On compare avec le profil de B
-    # ─────────────────────────────────────────
-    if offres_a:
-        for offre in offres_a:
-            # La compétence proposée dans l'offre
-            # correspond à une lacune de B ?
-            if offre.subject.strip() in lacunes_b:
-                score_brut += 20
-            score_maximum += 20
+    if proposals_a:
+        for proposal in proposals_a:
+            if proposal.type == 'OFFRE':
+                if proposal.matiere.strip() in lacunes_b:
+                    score_brut += 35
+                score_maximum += 35
+            elif proposal.type == 'DEMANDE':
+                competences_b = _split(profile_b.competences)
+                if proposal.matiere.strip() in competences_b:
+                    score_brut += 35
+                score_maximum += 35
 
-            # Les disponibilités du formulaire chevauchent-elles
-            # les disponibilités habituelles de B ?
-            if offre.disponibilite_debut and offre.disponibilite_fin:
-                for dispo_b in dispos_b:
-                    if dispo_b.strip():
-                        score_brut += 10
-                        break
-                score_maximum += 10
-
-    if demandes_a:
-        for demande in demandes_a:
-            # La lacune exprimée dans la demande
-            # correspond à une compétence de B ?
-            competences_b = set(
-                [c.strip() for c in profile_b.competences.split(',') if c.strip()]
-            )
-            if demande.subject.strip() in competences_b:
-                score_brut += 20
-            score_maximum += 20
-
-            # Les disponibilités du formulaire chevauchent-elles
-            # les disponibilités habituelles de B ?
-            if demande.disponibilite_debut and demande.disponibilite_fin:
-                for dispo_b in dispos_b:
-                    if dispo_b.strip():
-                        score_brut += 10
-                        break
-                score_maximum += 10
-
-    # ─────────────────────────────────────────
-    # NORMALISATION — Score sur 100
-    # Si score_maximum = 0 → pas de critères → score = 0
-    # Sinon → score normalisé = (score_brut / score_maximum) × 100
-    # ─────────────────────────────────────────
     if score_maximum == 0:
         return 0
 
     score_normalise = round((score_brut / score_maximum) * 100)
-
-    # On s'assure que le score ne dépasse pas 100
     return min(score_normalise, 100)
 
 
-def recherche_matchs(request):
-    """
-    Vue principale du matching.
-    Récupère l'utilisateur connecté, compare son profil
-    avec tous les autres et retourne les résultats triés.
-    """
-    # Vérifier si l'utilisateur est connecté
-    user_id = request.session.get('user_id')
-    if not user_id:
-        # Si non connecté → liste vide
-        return render(request, 'matching/resultats_matchs.html', {'matchs': []})
+def calculer_score(user_a, user_b, proposals_a=None):
+    """Score symétrique : moyenne des deux sens."""
+    score_ab = _calculer_score_dir(user_a, user_b, proposals_a)
+    score_ba = _calculer_score_dir(user_b, user_a, None)
+    return (score_ab + score_ba) // 2
 
-    # Récupérer l'utilisateur connecté
-    user_actuel = User.objects.get(id=user_id)
 
-    # ─────────────────────────────────────────
-    # Récupérer les offres et demandes
-    # de l'utilisateur connecté
-    # Si le module n'est pas encore prêt → listes vides
-    # ─────────────────────────────────────────
+def trouver_matiere(user_a, user_b):
+    """Retourne la première matière commune compétence↔lacune dans les deux sens."""
     try:
-        from backend.offre_demandes.models import Offre, Demande
-        offres_user = Offre.objects.filter(auteur_id=user_actuel.id)
-        demandes_user = Demande.objects.filter(auteur_id=user_actuel.id)
-    except:
-        offres_user = []
-        demandes_user = []
+        pa = user_a.profile
+        pb = user_b.profile
+    except Profile.DoesNotExist:
+        return ''
+    commun = (_split(pa.competences) & _split(pb.lacunes)) | (_split(pb.competences) & _split(pa.lacunes))
+    return list(commun)[0] if commun else ''
 
-    # ─────────────────────────────────────────
-    # Récupérer tous les autres utilisateurs
-    # sauf l'utilisateur connecté
-    # ─────────────────────────────────────────
+
+def recherche_matchs(request):
+    if not request.user.is_authenticated:
+        return render(request, 'resultats_matching.html', {'matchs': []})
+
+    user_actuel = request.user
+
+    proposals_user = Proposal.objects.filter(auteur_id=user_actuel.id)
+
     tous_les_users = User.objects.exclude(id=user_actuel.id)
 
-    # ─────────────────────────────────────────
-    # Appliquer les filtres si l'utilisateur
-    # en a choisi dans le menu
-    # ─────────────────────────────────────────
     filiere_filtre = request.GET.get('filiere', '')
     niveau_filtre = request.GET.get('niveau', '')
     sexe_filtre = request.GET.get('sexe', '')
 
     if filiere_filtre:
-        # Filtrer par filière
         tous_les_users = tous_les_users.filter(
-            profile__filiere=filiere_filtre
+            profile__filiere__iexact=filiere_filtre
         )
     if niveau_filtre:
-        # Filtrer par niveau
         tous_les_users = tous_les_users.filter(
-            profile__niveau=niveau_filtre
+            profile__niveau__iexact=niveau_filtre
         )
     if sexe_filtre:
-        # Filtrer par sexe
         tous_les_users = tous_les_users.filter(
-            profile__sexe=sexe_filtre
+            profile__sexe__iexact=sexe_filtre
         )
 
-    # ─────────────────────────────────────────
-    # Calculer le score pour chaque utilisateur
-    # et garder uniquement ceux avec un score > 0
-    # ─────────────────────────────────────────
     resultats = []
     for user in tous_les_users:
         score = calculer_score(
             user_actuel,
             user,
-            offres_a=offres_user,
-            demandes_a=demandes_user
+            proposals_a=proposals_user
         )
         if score > 0:
             resultats.append({
                 'user': user,
                 'score': score,
+                'matiere': trouver_matiere(user_actuel, user),
             })
 
-    # ─────────────────────────────────────────
-    # Trier les résultats du score
-    # le plus élevé au plus bas
-    # ─────────────────────────────────────────
     resultats = sorted(resultats, key=lambda x: x['score'], reverse=True)
 
-    # Envoyer les résultats à la page HTML
-    return render(request, 'matching/resultats_matchs.html', {
+    a_offre = proposals_user.filter(type='OFFRE').exists()
+    a_demande = proposals_user.filter(type='DEMANDE').exists()
+    if a_offre and not a_demande:
+        titre = 'Veuillez choisir un mentoré'
+    elif a_demande and not a_offre:
+        titre = 'Veuillez choisir un mentor'
+    else:
+        titre = 'Matchs proposés'
+
+    return render(request, 'resultats_matching.html', {
         'matchs': resultats,
         'filiere_filtre': filiere_filtre,
         'niveau_filtre': niveau_filtre,
         'sexe_filtre': sexe_filtre,
+        'titre': titre,
     })
+
+
+@login_required
+@require_POST
+def accepter_match(request):
+    import json
+    data = json.loads(request.body)
+    cible_id = data.get('user_id')
+    score = data.get('score', 0)
+    matiere = data.get('matiere', '')
+    try:
+        cible = User.objects.get(id=cible_id)
+    except User.DoesNotExist:
+        return JsonResponse({'status': 'erreur', 'message': 'Utilisateur introuvable'}, status=404)
+
+    existants = Matching.objects.filter(
+        user1=request.user, user2=cible, statut__in=['EN_ATTENTE', 'VALIDE']
+    ) | Matching.objects.filter(
+        user1=cible, user2=request.user, statut__in=['EN_ATTENTE', 'VALIDE']
+    )
+    if existants.exists():
+        return JsonResponse({'status': 'deja_existant'})
+    Matching.objects.filter(
+        user1=request.user, user2=cible
+    ).delete()
+    Matching.objects.filter(
+        user1=cible, user2=request.user
+    ).delete()
+
+    Matching.objects.create(user1=request.user, user2=cible, score=score, statut='EN_ATTENTE', matiere=matiere)
+    return JsonResponse({'status': 'ok'})
+
+
+@login_required
+@require_POST
+def repondre_match(request):
+    import json
+    data = json.loads(request.body)
+    match_id = data.get('match_id')
+    action = data.get('action')
+    try:
+        match = Matching.objects.get(id=match_id)
+    except Matching.DoesNotExist:
+        return JsonResponse({'status': 'erreur', 'message': 'Match introuvable'}, status=404)
+
+    if request.user not in (match.user1, match.user2):
+        return JsonResponse({'status': 'erreur', 'message': 'Pas votre match'}, status=403)
+
+    if action == 'valider':
+        match.statut = 'VALIDE'
+    elif action == 'rejeter':
+        match.statut = 'REJETE'
+    elif action == 'terminer':
+        match.statut = 'TERMINE'
+    elif action == 'annuler':
+        match.statut = 'REJETE'
+    else:
+        return JsonResponse({'status': 'erreur', 'message': 'Action inconnue'}, status=400)
+    match.save()
+    return JsonResponse({'status': 'ok'})
