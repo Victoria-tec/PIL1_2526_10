@@ -145,16 +145,16 @@ page-header{
     color: white;
 }
 
-.logo{
-    width: 75px;
-    height: 50px;
-    margin-left: 10px;
+.logo img{
+    width: 125px;
+    height: 100px;
+    margin-left: 5px;
 }
 
 .header-buttons{
     display: flex;
     justify-content: space-between;
-    margin-top: 5px;
+    margin-top: 25px;
 }
 
 .header-buttons > a {

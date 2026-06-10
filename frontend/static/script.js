@@ -2,7 +2,7 @@ class PageHeader extends HTMLElement{
     connectedCallback(){
         let type = this.getAttribute("variante")
         this.innerHTML = `
-                <div><img class="logo" src="../static/images/logo.png" alt="logo"></div>
+                <div class="logo"><img src="../static/images/logo.png" alt="logo"></div>
                 <div class="header-buttons">
                     ${type === "accueil" ? `
                             <a href="base.html">
