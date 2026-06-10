@@ -37,9 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'channels', 
-    'backend.messagerie'
+    'channels',
+    'gestion_comptes',
+    'matching',
+    'messagerie',
+    'annonces',
+    'backend.messagerie',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -77,14 +82,16 @@ WSGI_APPLICATION = 'IFRI_MentorLink.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'IFRI_MentorLink',      # Le nom de la base créée dans son pgAdmin
-        'USER': 'postgres',              # Son nom d'utilisateur pgAdmin
-        'PASSWORD': 'M@n02008',   # Son vrai mot de passe pgAdmin
+        'NAME': 'ifri_mentorlink_db',
+        'USER': 'postgres',
+        'PASSWORD': '1234',
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
-
+# Default primary key field type
+# https://docs.djangoproject.com/en/6.0/ref/settings/#default-auto-field
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -132,3 +139,6 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+AUTH_USER_MODEL = 'gestion_comptes.User'
+
