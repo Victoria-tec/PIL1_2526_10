@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IFRI_MentorLink — Rapport de Projet | Groupe 10</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ink:       #0d0d0d;
+      --paper:     #f5f2eb;
+      --accent:    #1a6b4a;
+      --accent2:   #e8a020;
+      --muted:     #6b6660;
+      --border:    #d4cfc6;
+      --card:      #ffffff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 2.5rem;
+      height: 56px;
+      background: rgba(245,242,235,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-brand {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 1rem;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+    .topbar-nav { display: flex; gap: 1.8rem; }
+    .topbar-nav a {
+      font-size: 0.82rem; font-weight: 500;
+      color: var(--muted); text-decoration: none;
+      letter-spacing: 0.03em; text-transform: uppercase;
+      transition: color .2s;
+    }
+    .topbar-nav a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 6rem 2.5rem 4rem;
+      max-width: 1100px; margin: 0 auto;
+      position: relative;
+    }
+    .hero-eyebrow {
+      font-size: 0.78rem; font-weight: 500; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 1.2rem;
+      opacity: 0; animation: fadeUp .6s .1s forwards;
+    }
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 800; line-height: 1;
+      letter-spacing: -0.03em;
+      opacity: 0; animation: fadeUp .6s .25s forwards;
+    }
+    .hero-title span { color: var(--accent); }
+    .hero-sub {
+      margin-top: 1.8rem;
+      font-size: 1.15rem; font-weight: 300;
+      max-width: 560px; color: var(--muted);
+      opacity: 0; animation: fadeUp .6s .4s forwards;
+    }
+    .hero-meta {
+      margin-top: 3rem;
+      display: flex; gap: 2.5rem; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp .6s .55s forwards;
+    }
+    .hero-meta-item { display: flex; flex-direction: column; gap: .2rem; }
+    .hero-meta-item .label {
+      font-size: 0.72rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .hero-meta-item .value {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 1rem; color: var(--ink);
+    }
+    .hero-divider {
+      position: absolute; bottom: 3rem; left: 2.5rem;
+      width: 60px; height: 3px;
+      background: var(--accent2);
+      opacity: 0; animation: fadeUp .6s .7s forwards;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      max-width: 1100px; margin: 0 auto;
+      padding: 5rem 2.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .section-header {
+      display: flex; align-items: baseline; gap: 1.2rem;
+      margin-bottom: 3rem;
+    }
+    .section-num {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 0.75rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent2);
+      white-space: nowrap;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      letter-spacing: -0.02em; line-height: 1.1;
+    }
+
+    /* ── MEMBERS GRID ── */
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .member-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.6rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .member-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,.08);
+    }
+    .member-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent);
+    }
+    .member-card.chef::before { background: var(--accent2); }
+    .member-initials {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 0.9rem; color: #fff;
+      margin-bottom: 1rem;
+    }
+    .member-card.chef .member-initials { background: var(--accent2); }
+    .member-name {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 0.95rem; margin-bottom: .25rem;
+    }
+    .member-role {
+      font-size: 0.8rem; color: var(--accent); font-weight: 500;
+      margin-bottom: .5rem;
+    }
+    .member-filiere {
+      display: inline-block;
+      font-size: 0.72rem; font-weight: 500; letter-spacing: .06em;
+      text-transform: uppercase;
+      background: var(--paper); border: 1px solid var(--border);
+      border-radius: 20px; padding: .2rem .7rem;
+      color: var(--muted);
+    }
+    .member-task {
+      margin-top: .8rem; font-size: 0.85rem; color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── PROCESS ── */
+    .process-list { display: flex; flex-direction: column; gap: 1.2rem; }
+    .process-item {
+      display: grid; grid-template-columns: 48px 1fr;
+      gap: 1.2rem; align-items: start;
+    }
+    .process-dot {
+      width: 48px; height: 48px; border-radius: 50%;
+      border: 2px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 0.9rem; color: var(--accent);
+      flex-shrink: 0;
+    }
+    .process-content strong {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 1rem; display: block; margin-bottom: .3rem;
+    }
+    .process-content p { font-size: 0.9rem; color: var(--muted); }
+
+    /* ── CONCEPTION ── */
+    .conception-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .conception-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.8rem;
+    }
+    .conception-icon {
+      font-size: 1.6rem; margin-bottom: 1rem;
+    }
+    .conception-card h3 {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 1rem; margin-bottom: .6rem;
+    }
+    .conception-card p {
+      font-size: 0.88rem; color: var(--muted); line-height: 1.6;
+    }
+    .conception-card ul {
+      list-style: none; margin-top: .8rem;
+    }
+    .conception-card ul li {
+      font-size: 0.85rem; color: var(--muted);
+      padding: .25rem 0;
+      padding-left: 1rem; position: relative;
+    }
+    .conception-card ul li::before {
+      content: '→';
+      position: absolute; left: 0;
+      color: var(--accent); font-size: 0.75rem;
+    }
+
+    /* ── DB SCHEMA ── */
+    .db-tables {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+    .db-table {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden;
+    }
+    .db-table-header {
+      background: var(--ink); color: #fff;
+      padding: .7rem 1rem;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 0.85rem; letter-spacing: .04em;
+    }
+    .db-table-body { padding: .8rem 1rem; }
+    .db-field {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .3rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.82rem;
+    }
+    .db-field:last-child { border-bottom: none; }
+    .db-field-name { font-weight: 500; }
+    .db-field-name.pk { color: var(--accent2); }
+    .db-field-name.fk { color: var(--accent); }
+    .db-field-type {
+      font-size: 0.72rem; color: var(--muted);
+      font-family: monospace; background: var(--paper);
+      padding: .1rem .4rem; border-radius: 4px;
+    }
+
+    /* ── CODE BLOCK ── */
+    .code-block {
+      background: var(--ink); color: #e8e4dc;
+      border-radius: 10px; padding: 1.6rem;
+      font-family: 'Courier New', monospace; font-size: 0.85rem;
+      line-height: 1.8; overflow-x: auto;
+    }
+    .code-block .comment { color: #6b8c6b; }
+    .code-block .keyword { color: var(--accent2); font-weight: bold; }
+    .code-block .string { color: #a8c5a0; }
+
+    /* ── DEPLOY STEPS ── */
+    .deploy-steps { display: flex; flex-direction: column; gap: 1rem; }
+    .deploy-step {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.4rem 1.6rem;
+      display: grid; grid-template-columns: 32px 1fr;
+      gap: 1.2rem; align-items: start;
+    }
+    .deploy-step-num {
+      width: 32px; height: 32px; border-radius: 6px;
+      background: var(--accent); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 0.85rem; flex-shrink: 0;
+    }
+    .deploy-step h4 {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 0.95rem; margin-bottom: .4rem;
+    }
+    .deploy-step p { font-size: 0.88rem; color: var(--muted); }
+    .deploy-step code {
+      display: inline-block; margin-top: .5rem;
+      background: var(--ink); color: var(--accent2);
+      font-family: monospace; font-size: 0.8rem;
+      padding: .25rem .6rem; border-radius: 5px;
+    }
+
+    /* ── MANUAL ── */
+    .manual-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.2rem;
+    }
+    .manual-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.6rem;
+    }
+    .manual-card h3 {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 0.95rem; margin-bottom: .8rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .manual-card ol {
+      padding-left: 1.2rem;
+    }
+    .manual-card ol li {
+      font-size: 0.87rem; color: var(--muted);
+      padding: .2rem 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      max-width: 1100px; margin: 0 auto;
+      padding: 3rem 2.5rem;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    footer p { font-size: 0.82rem; color: var(--muted); }
+    .footer-badge {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 0.8rem; letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent); background: rgba(26,107,74,.08);
+      padding: .4rem 1rem; border-radius: 20px;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .topbar-nav { display: none; }
+      .hero { padding-top: 5rem; }
+      .hero-meta { gap: 1.5rem; }
+      section { padding: 3.5rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <span class="topbar-brand">IFRI_MentorLink · Groupe 10</span>
+  <div class="topbar-nav">
+    <a href="#membres">Membres</a>
+    <a href="#fonctionnement">Démarche</a>
+    <a href="#conception">Conception</a>
+    <a href="#deploiement">Déploiement</a>
+    <a href="#manuel">Manuel</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-eyebrow">Projet Intégrateur PIL1 · 2025–2026</p>
+  <h1 class="hero-title">IFRI_<span>Mentor</span>Link</h1>
+  <p class="hero-sub">
+    Plateforme web de mise en relation entre mentors et mentorés au sein de
+    l'Institut de Formation et de Recherche en Informatique (IFRI)de l'Université d'Abomey-Calavi (UAC).
+  </p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <span class="label">Établissement</span>
+      <span class="value">IFRI — UAC</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="label">Groupe</span>
+      <span class="value">N° 10</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="label">Dépôt</span>
+      <span class="value">PIL1_2526_10</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="label">Année</span>
+      <span class="value">2025 – 2026</span>
+    </div>
+  </div>
+  <div class="hero-divider"></div>
+</div>
+
+<!-- SECTION 1 : MEMBRES -->
+<section id="membres">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Membres du groupe</h2>
+  </div>
+  <div class="members-grid">
+
+    <div class="member-card chef">
+      <div class="member-initials">VT</div>
+      <div class="member-name">TOVIHOUANDE Victoria Gloria</div>
+      <div class="member-role">Coordinatrice · Authentification &amp; Matching</div>
+      <span class="member-filiere">IA — Intelligence Artificielle</span>
+      <p class="member-task">Gestion de la coordination du groupe, développement du module d'authentification utilisateur et de l'algorithme de mise en correspondance mentor-mentoré.</p>
+    </div>
+
+    <div class="member-card">
+      <div class="member-initials">ED</div>
+      <div class="member-name">DJOSSOU Eustache Mawudro Emmanuel</div>
+      <div class="member-role">Messagerie instantanée</div>
+      <span class="member-filiere">IM — Internet &amp; Multimédia</span>
+      <p class="member-task">Développement du module de messagerie en temps réel : envoi/réception de messages et historique des conversations.</p>
+    </div>
+
+    <div class="member-card">
+      <div class="member-initials">MT</div>
+      <div class="member-name">TCHIBOZO Michel Hans Sèmako</div>
+      <div class="member-role">CSS Commun &amp; Design System</div>
+      <span class="member-filiere">GL — Génie Logiciel</span>
+      <p class="member-task">Création du design system global : charte graphique, composants réutilisables, cohérence visuelle et responsive design de l'application.</p>
+    </div>
+
+    <div class="member-card">
+      <div class="member-initials">VK</div>
+      <div class="member-name">KAGBO Vignon Bel-ange</div>
+      <div class="member-role">Base de données &amp; Configuration Django</div>
+      <span class="member-filiere">SI — Sécurité Informatique</span>
+      <p class="member-task">Conception et mise en place de la base de données relationnelle, configuration du projet Django et gestion des migrations.</p>
+    </div>
+
+    <div class="member-card">
+      <div class="member-initials">HI</div>
+      <div class="member-name">HINLIN Sèdami Merveille Immaculée</div>
+      <div class="member-role">Offres &amp; Demandes de mentorat</div>
+      <span class="member-filiere">SI — Sécurité Informatique</span>
+      <p class="member-task">Gestion du module d'offre et demande:formulaire offre et demande .</p>
+    </div>
+
+    <div class="member-card">
+      <div class="member-initials">YH</div>
+      <div class="member-name">HOUNTONDJI Akhen Yin Ausmdy</div>
+      <div class="member-role">Rapport technique &amp; Fichier SQL</div>
+      <span class="member-filiere">SE&amp;IoT — Systèmes Embarqués &amp; IoT</span>
+      <p class="member-task">Rédaction du rapport technique de projet et production du fichier.sql final décrivant la structure complète de la base de données.</p>
+    </div>
+
+    <div class="member-card">
+      <div class="member-initials">KG</div>
+      <div class="member-name"> GOHOUNGO Kévin Earl Yao</div>
+      <div class="member-role"> Frontend de la page pour la messagerie et de profil de l'utilisateur. </div>
+      <span class="member-filiere">GL — Génie Logiciel</span>
+      <p class="member-task">Conception et developpement de l'interface utilisateur de  la messagerie : mise en page des conversations,zone de saisie des messages.
+        Développement de l'interface utilisateur de page de Profil : formulaire de modification des informations personnelles et mise à jour des compétences et disponiblités  </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION 2 : FONCTIONNEMENT -->
+<section id="fonctionnement">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Mode de fonctionnement du groupe</h2>
+  </div>
+  <div class="process-list">
+    <div class="process-item">
+      <div class="process-dot">01</div>
+      <div class="process-content">
+        <strong>Lancement et organisation</strong>
+        <p>Le groupe a été constitué et le groupe WhatsApp créé le 02 juin 2026 par TOVIHOUANDE Victoria Gloria. Dès le premier jour, chaque membre s'est présenté et le groupe a analysé ensemble le cahier de charges. La première décision collective a été de configurer GitHub : Victoria a créé le dépôt, chaque membre a envoyé son nom de compte et a été invité. Le nom du dépôt <strong>PIL1_2526_10</strong> a été adopté collectivement .</p>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-dot">02</div>
+      <div class="process-content">
+        <strong>Communication et suivi</strong>
+        <p>Les échanges quotidiens se font via le groupe WhatsApp . Les membres y partagent leurs avancées, leurs blocages et s'entraident. Victoria assure le rôle de coordinatrice : elle relance les membres, vérifie les avancements et prend les décisions techniques importantes après discussion collective.
+          Tout au long du projet nous avons eu 3 rencontres en présentiel à la bibliothèque de la FSA du Lundi 08 Juin au Mercredi 10 juin de 09h à 17h . 
+        </p>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-dot">03</div>
+      <div class="process-content">
+        <strong>Développement collaboratif avec Git</strong>
+        <p>Chaque membre travaille sur une branche dédiée à son module. Les fichiers sont partagés entre membres lorsque nécessaire — par exemple Victoria a transmis ses fichiers d'authentification à TCHIBOZO Michel pour l'intégration du CSS commun afin de tester une possible fusion entre leurs deux branchessss . Des commits réguliers permettent de tracer l'avancement individuel de chacun.</p>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-dot">04</div>
+      <div class="process-content">
+        <strong>Intégration et tests</strong>
+        <p>La phase d'intégration a consisté à assembler les modules développés en parallèle. DJOSSOU Eustache et KAGBO Bel-ange ont coordonné la fusion du module de messagerie avec la base de données. KAGBO a également ajouté les tables manquantes à la BDD pour assurer la cohérence de l'ensemble.</p>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-dot">05</div>
+      <div class="process-content">
+        <strong>Finalisation et livraison</strong>
+        <p>Les derniers jours avant la deadline du 10 juin 2026 ont été consacrés aux corrections finales, à l'installation des dépendances (PostgreSQL notamment), à la rédaction du rapport technique et du fichier SQL, et au dépôt final de tous les livrables sur le dépôt GitHub.</p>s
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3 : CONCEPTION -->
+<section id="conception">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Description de la conception</h2>
+  </div>
+
+  <div class="conception-grid" style="margin-bottom: 3rem;">
+    <div class="conception-card">
+      <div class="conception-icon">🏗️</div>
+      <h3>Architecture</h3>
+      <p>L'application suit une architecture client-serveur classique :</p>
+      <ul>
+        <li>Frontend : HTML/CSS/JavaScript</li>
+        <li>Backend : Python avec Django</li>
+        <li>Base de données : PostgreSQL(géré via pgAdmin4)</li>
+        
+      </ul>
+    </div>
+    <div class="conception-card">
+      <div class="conception-icon">📦</div>
+      <h3>Modules principaux</h3>
+      <p>L'application est découpée en quatres appications distictes : :</p>
+      <ul>
+        <li>Gestion des comptes et profils et authentification</li>
+        <li>Mise en correspondance automatique (matching)</li>
+        <li>Messagerie instantanée</li>
+        <li> annonces -  offres et demande de mentorat </li>
+      </ul>
+    </div>
+    <div class="conception-card">
+      <div class="conception-icon">🤝</div>
+      <h3>Algorithme de matching</h3>
+      <p>Le score de compatibilité est calculé en pondérant :</p>
+      <ul>
+        <li> Analyse des profils utilisateurs (compétences, filière, niveau d'étude</li>
+        <li>Analyse des offres et demandes publiées </li>
+        
+      </ul>
+    </div>
+    <div class="conception-card">
+      <div class="conception-icon">🔒</div>
+      <h3>Sécurité</h3>
+      <p>Les mesures de sécurité implémentées incluent :</p>
+      <ul>
+        <li>Hachage des mots de passe via PBKDF2</li>
+        <li>Authentification par session Django</li>
+        <li>Validation côté serveur des données</li>
+        <li>Accès restreint aux données personnelles</li>
+      </ul>
+    </div>
+  </div>
+
+  
+
+    <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:1.5rem;">Structure de la base de données</h3>
+<div class="db-tables">
+
+  <div class="db-table">
+    <div class="db-table-header">gestion_comptes_user</div>
+    <div class="db-table-body">
+      <div class="db-field"><span class="db-field-name pk">id</span><span class="db-field-type">BIGINT PK</span></div>
+      <div class="db-field"><span class="db-field-name">username</span><span class="db-field-type">VARCHAR(150) UNIQUE</span></div>
+      <div class="db-field"><span class="db-field-name">first_name</span><span class="db-field-type">VARCHAR(150)</span></div>
+      <div class="db-field"><span class="db-field-name">last_name</span><span class="db-field-type">VARCHAR(150)</span></div>
+      <div class="db-field"><span class="db-field-name">email</span><span class="db-field-type">VARCHAR(254) UNIQUE</span></div>
+      <div class="db-field"><span class="db-field-name">telephone</span><span class="db-field-type">VARCHAR(20) UNIQUE</span></div>
+      <div class="db-field"><span class="db-field-name">password</span><span class="db-field-type">VARCHAR(128)</span></div>
+      <div class="db-field"><span class="db-field-name">is_superuser</span><span class="db-field-type">BOOLEAN</span></div>
+      <div class="db-field"><span class="db-field-name">is_staff</span><span class="db-field-type">BOOLEAN</span></div>
+      <div class="db-field"><span class="db-field-name">is_active</span><span class="db-field-type">BOOLEAN</span></div>
+      <div class="db-field"><span class="db-field-name">date_joined</span><span class="db-field-type">TIMESTAMP TZ</span></div>
+      <div class="db-field"><span class="db-field-name">last_login</span><span class="db-field-type">TIMESTAMP TZ</span></div>
+      <div class="db-field"><span class="db-field-name">date_inscription</span><span class="db-field-type">TIMESTAMP TZ</span></div>
+    </div>
+  </div>
+
+  <div class="db-table">
+    <div class="db-table-header">gestion_comptes_profile</div>
+    <div class="db-table-body">
+      <div class="db-field"><span class="db-field-name pk">id</span><span class="db-field-type">BIGINT PK</span></div>
+      <div class="db-field"><span class="db-field-name fk">user_id</span><span class="db-field-type">BIGINT FK UNIQUE</span></div>
+      <div class="db-field"><span class="db-field-name">filiere</span><span class="db-field-type">VARCHAR(100)</span></div>
+      <div class="db-field"><span class="db-field-name">niveau</span><span class="db-field-type">VARCHAR(50)</span></div>
+      <div class="db-field"><span class="db-field-name">competences</span><span class="db-field-type">TEXT</span></div>
+      <div class="db-field"><span class="db-field-name">lacunes</span><span class="db-field-type">TEXT</span></div>
+      <div class="db-field"><span class="db-field-name">disponibilites</span><span class="db-field-type">TEXT</span></div>
+      <div class="db-field"><span class="db-field-name">bio</span><span class="db-field-type">TEXT</span></div>
+      <div class="db-field"><span class="db-field-name">photo</span><span class="db-field-type">VARCHAR(100)</span></div>
+      <div class="db-field"><span class="db-field-name">sexe</span><span class="db-field-type">VARCHAR(1)</span></div>
+    </div>
+  </div>
+
+  <div class="db-table">
+    <div class="db-table-header">backend_offres_demandes_proposal</div>
+    <div class="db-table-body">
+      <div class="db-field"><span class="db-field-name pk">id</span><span class="db-field-type">BIGINT PK</span></div>
+      <div class="db-field"><span class="db-field-name fk">auteur_id</span><span class="db-field-type">BIGINT FK</span></div>
+      <div class="db-field"><span class="db-field-name">type</span><span class="db-field-type">VARCHAR(10)</span></div>
+      <div class="db-field"><span class="db-field-name">matiere</span><span class="db-field-type">VARCHAR(100)</span></div>
+      <div class="db-field"><span class="db-field-name">description</span><span class="db-field-type">TEXT</span></div>
+      <div class="db-field"><span class="db-field-name">disponibilite_debut</span><span class="db-field-type">TIMESTAMP TZ</span></div>
+      <div class="db-field"><span class="db-field-name">disponibilite_fin</span><span class="db-field-type">TIMESTAMP TZ</span></div>
+      <div class="db-field"><span class="db-field-name">modalite</span><span class="db-field-type">VARCHAR(15)</span></div>
+      <div class="db-field"><span class="db-field-name">statut</span><span class="db-field-type">VARCHAR(10)</span></div>
+      <div class="db-field"><span class="db-field-name">date_creation</span><span class="db-field-type">TIMESTAMP TZ</span></div>
+    </div>
+  </div>
+
+  <div class="db-table">
+    <div class="db-table-header">backend_matching_matching</div>
+    <div class="db-table-body">
+      <div class="db-field"><span class="db-field-name pk">id</span><span class="db-field-type">BIGINT PK</span></div>
+      <div class="db-field"><span class="db-field-name fk">user1_id</span><span class="db-field-type">BIGINT FK</span></div>
+      <div class="db-field"><span class="db-field-name fk">user2_id</span><span class="db-field-type">BIGINT FK</span></div>
+      <div class="db-field"><span class="db-field-name">matiere</span><span class="db-field-type">VARCHAR(100)</span></div>
+      <div class="db-field"><span class="db-field-name">score</span><span class="db-field-type">INTEGER</span></div>
+      <div class="db-field"><span class="db-field-name">statut</span><span class="db-field-type">VARCHAR(15)</span></div>
+      <div class="db-field"><span class="db-field-name">date</span><span class="db-field-type">TIMESTAMP TZ</span></div>
+    </div>
+  </div>
+
+  <div class="db-table">
+    <div class="db-table-header">backend_messagerie_conversation</div>
+    <div class="db-table-body">
+      <div class="db-field"><span class="db-field-name pk">id</span><span class="db-field-type">BIGINT PK</span></div>
+      <div class="db-field"><span class="db-field-name">creee_le</span><span class="db-field-type">TIMESTAMP TZ</span></div>
+    </div>
+  </div>
+
+  <div class="db-table">
+    <div class="db-table-header">backend_messagerie_conversation_participants</div>
+    <div class="db-table-body">
+      <div class="db-field"><span class="db-field-name pk">id</span><span class="db-field-type">BIGINT PK</span></div>
+      <div class="db-field"><span class="db-field-name fk">conversation_id</span><span class="db-field-type">BIGINT FK</span></div>
+      <div class="db-field"><span class="db-field-name fk">user_id</span><span class="db-field-type">BIGINT FK</span></div>
+    </div>
+  </div>
+
+  <div class="db-table">
+    <div class="db-table-header">backend_messagerie_message</div>
+    <div class="db-table-body">
+      <div class="db-field"><span class="db-field-name pk">id</span><span class="db-field-type">BIGINT PK</span></div>
+      <div class="db-field"><span class="db-field-name fk">conversation_id</span><span class="db-field-type">BIGINT FK</span></div>
+      <div class="db-field"><span class="db-field-name fk">expediteur_id</span><span class="db-field-type">BIGINT FK</span></div>
+      <div class="db-field"><span class="db-field-name">contenu</span><span class="db-field-type">TEXT</span></div>
+      <div class="db-field"><span class="db-field-name">envoye_le</span><span class="db-field-type">TIMESTAMP TZ</span></div>
+      <div class="db-field"><span class="db-field-name">lu</span><span class="db-field-type">BOOLEAN</span></div>
+    </div>
+  </div>
+
+  <div class="db-table">
+    <div class="db-table-header">gestion_comptes_user_groups</div>
+    <div class="db-table-body">
+      <div class="db-field"><span class="db-field-name pk">id</span><span class="db-field-type">BIGINT PK</span></div>
+      <div class="db-field"><span class="db-field-name fk">user_id</span><span class="db-field-type">BIGINT FK</span></div>
+      <div class="db-field"><span class="db-field-name fk">group_id</span><span class="db-field-type">INT FK</span></div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- SECTION 4 : DÉPLOIEMENT -->
+<section id="deploiement">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Instructions de déploiement</h2>
+  </div>
+  <div class="deploy-steps">
+
+    <div class="deploy-step">
+      <div class="deploy-step-num">1</div>
+      <div>
+        <h4>Prérequis</h4>
+        <p>Vérifier que les outils suivants sont installés sur la machine :</p>
+        <p style="margin-top:.5rem;font-size:.85rem;color:var(--muted);">
+          Python 3.12 &nbsp;·&nbsp; PostgreSQL &nbsp;·&nbsp; Git &nbsp;·&nbsp; VS Code (recommandé)
+       </p>
+        
+      </div>
+    </div>
+
+    
+
+    <div class="deploy-step">
+      <div class="deploy-step-num">2</div>
+      <div>
+        <h4>Cloner le projet</h4>
+        <p>Récupérer le code source depuis GitHub.</p>
+        <code>git clone https://github.com/Victoria-tec/PIL1_2526_10.git</code><br/>
+        <code style="margin-top:.4rem;display:inline-block;">cd PIL1_2526_10</code>
+      </div>
+    </div>
+
+    <div class="deploy-step">
+      <div class="deploy-step-num">3</div>
+      <div>
+        <h4>Créer et activer l'environnement virtuel</h4>
+        <p><strong>Windows :</strong></p>
+        <code>python -m venv env</code><br/>
+        <code style="margin-top:.4rem;display:inline-block;">env\Scripts\activate.bat</code>
+        <p style="margin-top:.8rem;"><strong>Linux / Mac :</strong></p>
+        <code>python3 -m venv env</code><br/>
+        <code style="margin-top:.4rem;display:inline-block;">source env/bin/activate</code>
+      </div>
+    </div>
+
+    <div class="deploy-step">
+      <div class="deploy-step-num">4</div>
+      <div>
+        <h4>Installer les dépendances</h4>
+        <p>Installer tous les paquets requis listés dans requirements.txt.</p>
+        <code>pip install -r requirements.txt</code>
+      </div>
+    </div>
+
+    <div class="deploy-step">
+      <div class="deploy-step-num">5</div>
+      <div>
+        <h4>Configurer la base de données</h4>
+        <p>Ouvrir <strong>pgAdmin 4</strong> et créer une base de données nommée <strong>ifri_mentorlink</strong>. Ensuite ouvrir le fichier <strong>IFRI_MentorLink/settings.py</strong> et modifier les champs <strong>USER</strong> et <strong>PASSWORD</strong> avec vos identifiants PostgreSQL.</p>
+      </div>
+    </div>
+
+    <div class="deploy-step">
+      <div class="deploy-step-num">6</div>
+      <div>
+        <h4>Appliquer les migrations</h4>
+        <p>Créer toutes les tables dans la base de données.</p>
+        <code>python manage.py migrate</code>
+      </div>
+    </div>
+
+    <div class="deploy-step">
+      <div class="deploy-step-num">7</div>
+      <div>
+        <h4>Lancer le serveur</h4>
+        <p>Démarrer le serveur de développement Django.</p>
+        <code>python manage.py runserver</code>
+      </div>
+    </div>
+
+    <div class="deploy-step">
+      <div class="deploy-step-num">8</div>
+      <div>
+        <h4>Ouvrir dans le navigateur</h4>
+        <p>L'application est accessible à l'adresse suivante :</p>
+        <code>http://127.0.0.1:8000</code>
+      </div>
+    </div>
+
+  </div>
+
+  </div>
+</section>
+<!-- SECTION 5 Problèmes -->
+<section id="conception">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Problèmes rencontrés lors du projet </h2>
+  </div>
+
+  <div class="conception-grid" style="margin-bottom: 3rem;">
+    <div class="conception-card">
+      
+      <h3>Organisation </h3>
+      <p> Nous avions comme idée la création de deux team : une pour gérer le backend et l'autre pour gérer le frontend.  </p>
+      
+    </div>
+    <div class="conception-card">
+      
+      <h3>Fusion </h3>
+      <p> Nous avons, vers la fin du projet, décidé de merge toutes les branches dans une branche develop. Cela avait pour 
+        pour objectif d'avoir une idée de ce que donnerait le main. Nous avons alors rencontré plusieurs problèmes de conflits que nous avons réglés en présentiel.
+      </p>
+      
+    </div>
+    <div class="conception-card">
+      
+      <h3>Test</h3>
+      <p>Nous avons rencontrer plusieurs bugs éventuels lors des tests effectués .</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: MANUEL -->
+<section id="manuel">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Manuel d'utilisation</h2>
+  </div>
+  <div class="manual-grid">
+
+    <div class="manual-card">
+      <h3>📝 Créer un compte</h3>
+      <ol>
+        <li>Accéder à la page d'accueil</li>
+        <li>Cliquer sur « S'inscrire »</li>
+        <li>Remplir le formulaire (nom, prénom, email, téléphone, mot de passe,sexe )</li>
+        <li>Sélectionner ses points forts et points faibles</li>
+        <li> </li>
+        <li>Valider l'inscription</li>
+      </ol>
+    </div>
+
+    <div class="manual-card">
+      <h3>🔑 Se connecter</h3>
+      <ol>
+        <li>Accéder à la page de connexion</li>
+        <li>Saisir son email ou numéro de téléphone</li>
+        <li>Entrer son mot de passe</li>
+        <li>Cliquer sur « Connexion »</li>
+        <li>En cas d'oubli, utiliser « Mot de passe oublié »</li>
+      </ol>
+    </div>
+
+    <div class="manual-card">
+      <h3>👤 Gérer son profil</h3>
+      <ol>
+        <li>Accéder à « Mon Profil » depuis le menu</li>
+        <li>Modifier ses informations personnelles</li>
+        <li>Ajouter/modifier ses compétences et lacunes</li>
+        <li>Renseigner ses disponibilités horaires</li>
+        <li>Enregistrer les modifications</li>
+      </ol>
+    </div>
+
+    <div class="manual-card">
+      <h3>🤝 Publier une offre ou demande</h3>
+      <ol>
+        <li>Cliquer sur le bouton créer </li>
+        <li>Choisir « Offre » (je peux aider) ou « Demande » (j'ai besoin d'aide)</li>
+        <li>Sélectionner la matière concernée</li>
+        <li>Indiquer ses disponibilités et le format souhaité</li>
+        <li>Publier l'annonce</li>
+      </ol>
+    </div>
+
+    <div class="manual-card">
+      <h3>🔍 Trouver un mentor/mentoré</h3>
+      <ol>
+        <li> consulter votre tableau de bord </li>
+        <li>Consulter les suggestions automatiques</li>
+        <li>Filtrer par matière, filière ou disponibilité</li>
+        <li>Consulter le profil et le score de compatibilité</li>
+        <li>Envoyer une demande de mise en relation</li>
+      </ol>
+    </div>
+
+    <div class="manual-card">
+      <h3>💬 Utiliser la messagerie</h3>
+      <ol>
+        <li>Accéder à la section « Messages »</li>
+        <li>Sélectionner une conversation existante</li>
+        <li>Taper le message dans la zone de saisie</li>
+        <li>Envoyer avec le bouton ou la touche Entrée</li>
+        
+      </ol>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 IFRI_MentorLink · Groupe 10 · Université d'Abomey-Calavi</p>
+  <span class="footer-badge">PIL1 · 2025–2026</span>
+</footer>
+
+</body>
+</html>
