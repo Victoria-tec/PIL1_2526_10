@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -8,4 +9,7 @@ urlpatterns = [
     path('comptes/', include('backend.gestion_comptes.urls')),
     # URLs du matching : /matching/recherche/
     path('matching/', include('backend.matching.urls')),
+    # URLs de réinitialisation de mot de passe
+   
+   
 ]
